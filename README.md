@@ -6,9 +6,7 @@ https://github.com/Nikke-db/Nikke-db.github.io
 Requirements
 Make sure Node.js is installed
 
-1. Install dependencies (first time only)
-
-npm install
+1. Install dependencies (first time only)>> npm install
 
 2. Run the project
 
