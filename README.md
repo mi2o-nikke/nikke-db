@@ -4,7 +4,7 @@ Credit to Koshirei
 https://github.com/Nikke-db/Nikke-db.github.io
 
 Requirements
-Make sure Node.js is installed
+make sure Node.js is installed
 _______________________________________________________
 
 1. Install dependencies (first time only)>> npm install
