@@ -134,7 +134,6 @@ import _4koma_en from '@/utils/json/Gallery/4koma_en.json'
 import _4koma_jp from '@/utils/json/Gallery/4koma_jp.json'
 import _4koma_kr from '@/utils/json/Gallery/4koma_kr.json'
 import _4koma_zh from '@/utils/json/Gallery/4koma_zh.json'
-import _777 from '@/utils/json/Gallery/777.json'
 import absolute from '@/utils/json/Gallery/absolute.json'
 import albums from '@/utils/json/Gallery/albums.json'
 import arkguardian from '@/utils/json/Gallery/arkguardian.json'
@@ -149,7 +148,7 @@ import boomsday from '@/utils/json/Gallery/boomsday.json'
 import boomtheghost from '@/utils/json/Gallery/boomtheghost.json'
 import brandnewyear from '@/utils/json/Gallery/brandnewyear.json'
 import bsideidol from '@/utils/json/Gallery/bsideidol.json'
-import chapters from '@/utils/json/Gallery/chapters.json'
+import _777 from '@/utils/json/Gallery/777.json'
 import chocolateplease from '@/utils/json/Gallery/chocolateplease.json'
 import coinsinrush from '@/utils/json/Gallery/coinsinrush.json'
 import colorless from '@/utils/json/Gallery/colorless.json'
@@ -374,7 +373,6 @@ const buttonListSideStory = [
 
 const buttonListEvents = [
   { data: _2x2love },
-  { data: _777 },
   { data: absolute },
   { data: arkguardian },
   { data: beautyfullshot },
@@ -384,6 +382,7 @@ const buttonListEvents = [
   { data: boomtheghost },
   { data: brandnewyear },
   { data: bsideidol },
+  { data: _777 },
   { data: chocolateplease },
   { data: coinsinrush },
   { data: colorless },
