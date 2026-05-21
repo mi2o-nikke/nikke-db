@@ -7,8 +7,8 @@ Requirements
 make sure Node.js is installed
 _______________________________________________________
 
-Install dependencies (first time only)
-1. npm install
+
+1. npm install (install dependencies first time only)
 2. npm run dev
 
 OR just run the bat file in folder "_run.bat"
