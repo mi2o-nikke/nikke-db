@@ -11,6 +11,4 @@ _______________________________________________________
 1. npm install (install dependencies first time only)
 2. npm run dev
 
-OR just run the bat file in folder "_run.bat"
-
-(first time it might close automatically just reopen the .bat file again)
+OR just run the bat file in folder "_run.bat", first time it might close automatically just reopen the .bat file again
