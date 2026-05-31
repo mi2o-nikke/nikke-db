@@ -1,7 +1,7 @@
 <template>
   <div class="flexbox main-bg main-box-shadow">
     <span>
-      <RouterLink to="/"><img :src="logo" class="logo" /></RouterLink>
+      <RouterLink to="/"></RouterLink>
     </span>
 
 
@@ -50,8 +50,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-import logo from '@/assets/nikke-db.png'
 
 import type { route2DisplayInterface } from '@/components/common/Header/routes2Display'
 

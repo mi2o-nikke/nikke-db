@@ -17,9 +17,6 @@
     <div id="screenshotWithoutBench" v-if="tierList">
 
       <div id="titlediv">
-        <div id="titleimg">
-          <img :src="logo" alt="nikke-db icon" class="logo" v-show="tierList.print_NikkeDB"/>
-        </div>
         <div id="titletxt">
           <n-h1> {{ tierList.name }} </n-h1>
           <n-text>By {{ tierList.author }}</n-text>
@@ -86,7 +83,6 @@ import type { Ref } from 'vue'
 import { retrieveTierListFromLocalStorage, saveTierListToLocalStorage, initDefaultTierList } from '@/utils/tierlistUtils'
 import CharacterCard from '@/components/common/Tierlistmaker/CharacterCard.vue'
 import html2canvas from 'html2canvas'
-import logo from '@/assets/nikke-db.png'
 import GridOptions from '@/components/common/Tierlistmaker/GridOptions.vue'
 import type { tierlist } from '@/utils/interfaces/tierlist/tierlist'
 import { messagesEnum } from '@/utils/enum/globalParams'

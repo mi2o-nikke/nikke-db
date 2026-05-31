@@ -648,7 +648,7 @@ const successfullyLoaded = () => {
   setTimeout(() => {
     canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
     if (canvas) {
-      transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale)
+      transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
     }
   }, 50)
 
@@ -696,7 +696,7 @@ watch(
     setTimeout(() => {
       canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
       if (canvas) {
-        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale)
+        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
       }
     }, 300)
   }

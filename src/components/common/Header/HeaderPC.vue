@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import logo from '@/assets/nikke-db.png'
-
 import { GithubFilled } from '@vicons/antd'
 import { globalParams } from '@/utils/enum/globalParams'
 

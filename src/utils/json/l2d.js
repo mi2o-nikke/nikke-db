@@ -759,12 +759,13 @@ const l2dData = [
 ]
 
 const customZoomSettings = {
-  'oldtales': { zoom: 0.52, offsetX: 0, offsetY: 0 },
-  'staranis': { zoom: 0.35, offsetX: 100, offsetY: 0 },
+  'c352_01': { zoom: 0.3, offsetX: 0, offsetY: -180 },
   'favorite_c030': { zoom: 0.24, offsetX: 60, offsetY: 0 },
   'favorite_c032': { zoom: 0.3, offsetX: 60, offsetY: 0 },
   'favorite_c112': { zoom: 0.28, offsetX: 60, offsetY: 0 },
   'favorite_c352': { zoom: 0.34, offsetX: 60, offsetY: 0 },
+  'oldtales': { zoom: 0.52, offsetX: 0, offsetY: 0 },
+  'staranis': { zoom: 0.35, offsetX: 100, offsetY: 0 },
 }
 
 const voiceGroupMap = {
@@ -781,26 +782,38 @@ const voiceGroupMap = {
   'c352_01': 'c352',
 }
 
-const setCustomZoom = (characterId, canvas, transformScale) => {
-  if (customZoomSettings[characterId]) {
-    const settings = customZoomSettings[characterId]
+const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
+  // Create a pose-specific key for zoom settings
+  const zoomKey = currentPose === 'fb' ? characterId : `${characterId}_${currentPose}`
+  
+  if (customZoomSettings[zoomKey]) {
+    const settings = customZoomSettings[zoomKey]
     transformScale = settings.zoom
     
     if (canvas) {
       canvas.style.transform = 'scale(' + transformScale + ')'
       
-      if (settings.offsetX !== undefined) {
-        const currentLeft = parseInt(canvas.style.left.replaceAll('px', '')) || 0
-        canvas.style.left = (currentLeft + settings.offsetX) + 'px'
+      // Store the current position as base if not already stored
+      if (!canvas.dataset.baseLeft) {
+        canvas.dataset.baseLeft = canvas.style.left || '0px'
+        canvas.dataset.baseTop = canvas.style.top || '0px'
       }
       
-      if (settings.offsetY !== undefined) {
-        const currentTop = parseInt(canvas.style.top.replaceAll('px', '')) || 0
-        canvas.style.top = (currentTop + settings.offsetY) + 'px'
-      }
+      // Apply offsets relative to the stored base position to prevent accumulation
+      const baseLeft = parseInt(canvas.dataset.baseLeft.replaceAll('px', '')) || 0
+      const baseTop = parseInt(canvas.dataset.baseTop.replaceAll('px', '')) || 0
+      
+      canvas.style.left = (baseLeft + (settings.offsetX || 0)) + 'px'
+      canvas.style.top = (baseTop + (settings.offsetY || 0)) + 'px'
     }
     
     return transformScale
+  }
+  
+  // Reset base position tracking when no custom settings apply
+  if (canvas) {
+    canvas.dataset.baseLeft = ''
+    canvas.dataset.baseTop = ''
   }
   
   return transformScale
