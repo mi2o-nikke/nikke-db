@@ -12,4 +12,5 @@ _______________________________________________________
 2. npm run dev
 
 OR just run the bat file in folder "_run.bat"
+
 (first time it might close automatically just reopen the .bat file again)
