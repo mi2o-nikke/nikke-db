@@ -761,9 +761,10 @@ const l2dData = [
 const customZoomSettings = {
   'oldtales': { zoom: 0.52, offsetX: 0, offsetY: 0 },
   'staranis': { zoom: 0.35, offsetX: 100, offsetY: 0 },
-  'favorite_c112': { zoom: 0.28, offsetX: 60, offsetY: 0 },
   'favorite_c030': { zoom: 0.24, offsetX: 60, offsetY: 0 },
   'favorite_c032': { zoom: 0.3, offsetX: 60, offsetY: 0 },
+  'favorite_c112': { zoom: 0.28, offsetX: 60, offsetY: 0 },
+  'favorite_c352': { zoom: 0.34, offsetX: 60, offsetY: 0 },
 }
 
 const voiceGroupMap = {
@@ -776,6 +777,8 @@ const voiceGroupMap = {
   'c091_01': 'c091',
   'c093_01': 'c093',
   'c095_01': 'c095',
+  'c350_01': 'c350',
+  'c352_01': 'c352',
 }
 
 const setCustomZoom = (characterId, canvas, transformScale) => {

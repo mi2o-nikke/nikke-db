@@ -552,10 +552,24 @@ const getDefaultAnimation = (availableAnimations?: Array<{ name: string }>) => {
 
 const checkCharacterHasPose = (pose: 'fb' | 'aim' | 'cover' | 'temp'): boolean => {
   // Characters that don't have aim pose
-  const noAimCharacters = ['c992', 'c9019', 'c990', 'c989', 'c994'] // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
+  const noAimCharacters = [
+    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
+    'c350_old', 'c010_01', // mast:outdated, rapi:outdated
+    // All favorite characters only have fullbody pose
+    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
+    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
+    'favorite_c550', 'favorite_c072', 'favorite_c192'
+  ]
   
   // Characters that don't have cover pose
-  const noCoverCharacters = ['c992', 'c9019', 'c990', 'c989', 'c994'] // same as above
+  const noCoverCharacters = [
+    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
+    'c350_old', 'c010_01', // mast:outdated, rapi:outdated
+    // All favorite characters only have fullbody pose
+    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
+    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
+    'favorite_c550', 'favorite_c072', 'favorite_c192'
+  ]
   
   if (pose === 'aim' && noAimCharacters.includes(market.live2d.current_id)) {
     return false
