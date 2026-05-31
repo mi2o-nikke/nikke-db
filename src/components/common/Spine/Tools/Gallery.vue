@@ -370,7 +370,7 @@ const buttonListSideStory = [
   { data: side04 },
   { data: side05 }
 ] as buttonInterface[]
-
+//
 const buttonListEvents = [
   { data: _2x2love },
   { data: absolute },
