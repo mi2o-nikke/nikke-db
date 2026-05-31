@@ -1,7 +1,7 @@
 <template>
   <div id="l2dsearchbox" :class="checkMobile()" v-show="!market.live2d.hideUI">
     <n-card size="small" :bordered="false">
-      <n-input type="text" placeholder="Name" v-model:value="name_filter" :clearable="true"></n-input>
+      <n-input type="text" placeholder="Name or Group" v-model:value="name_filter" :clearable="true"></n-input>
       <button @click="toogleGroupExpand()" class="icon-btn">
         <img src="@/assets/images/sprite/si_c907_00_s.png" alt="Toggle Expand" />
       </button>
@@ -58,7 +58,10 @@ const toggleExpand = (name: string) => {
 }
 
 const toogleGroupExpand = () => {
-  groupExpansions.value.forEach((g) => (g.isExpanded = !g.isExpanded))
+  // Check if all groups are expanded
+  const allExpanded = groupExpansions.value.every((g) => g.isExpanded)
+  // If all are expanded, collapse all; otherwise expand all
+  groupExpansions.value.forEach((g) => (g.isExpanded = !allExpanded))
 }
 
 const getGroupItems = (name: string) => {
@@ -75,7 +78,12 @@ const visibleGroups = computed(() => {
   const map = new Map<string, live2d_interface[]>()
 
   for (const c of market.live2d.filtered_l2d_Array) {
-    if (filter && !c.name.toLowerCase().includes(filter)) continue
+    // Search by name OR group
+    if (filter) {
+      const matchesName = c.name.toLowerCase().includes(filter)
+      const matchesGroup = (c.group || '').toLowerCase().includes(filter)
+      if (!matchesName && !matchesGroup) continue
+    }
 
     const g = c.group || '_'
     if (!map.has(g)) map.set(g, [])
@@ -95,7 +103,6 @@ const visibleGroups = computed(() => {
 
     if (ra !== rb) return ra - rb
 
-    // same rank → alphabetical inside each group
     return a.localeCompare(b)
   })
 })
@@ -132,6 +139,8 @@ const changeSpine = (character: live2d_interface) => {
   left: 20px;
   top: 20px;
   height: calc(85vh - 0px);
+  z-index: 1000;
+  pointer-events: auto;
 
   .n-list {
     // min-height: calc(85vh - 120px);

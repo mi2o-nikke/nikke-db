@@ -18,6 +18,14 @@ let canvas: HTMLCanvasElement | null = null
 let spineCanvas: any = null
 const market = useMarket()
 
+// Track both aim and cover spines
+let aimSpinePlayer: any = null
+let coverSpinePlayer: any = null
+let currentActiveSpine: 'aim' | 'cover' | null = null
+
+// BGM tracking
+let currentBGM: HTMLAudioElement | null = null
+
 // http://esotericsoftware.com/spine-player#Viewports
 const spineViewport = {
   padLeft: '0%',
@@ -29,10 +37,274 @@ const spineViewport = {
 onMounted(() => {
   market.load.beginLoad()
   spineLoader()
+  setupClickListener()
 })
+
+const setupClickListener = () => {
+  const container = document.getElementById('player-container')
+  if (container) {
+    container.addEventListener('mousedown', handleActionStart)
+    container.addEventListener('mouseup', handleActionEnd)
+    container.addEventListener('mouseleave', handleActionEnd)
+  }
+}
+
+const handleActionStart = () => {
+  if (!spinePlayer) return
+  
+  // For cover pose - just play cover_reload then back to cover_idle
+  if (market.live2d.current_pose === 'cover') {
+    // Check if cover_reload animation exists
+    const animations = spinePlayer.animationState.data.skeletonData.animations
+    const hasCoverReload = animations.some((a: { name: string }) => a.name === 'cover_reload')
+    
+    if (!hasCoverReload) {
+      // Fallback to action if cover_reload doesn't exist
+      handleAction()
+      return
+    }
+    
+    spinePlayer.animationState.setAnimation(0, 'cover_reload', false)
+    spinePlayer.animationState.addAnimation(0, 'cover_idle', true, 0)
+    playVoice()
+    return
+  }
+  
+  // Special handling for aim pose - hold to keep playing aim_hit
+  if (market.live2d.current_pose === 'aim') {
+    // Check if aim_hit animation exists
+    const animations = spinePlayer.animationState.data.skeletonData.animations
+    const hasAimHit = animations.some((a: { name: string }) => a.name === 'aim_hit')
+    
+    if (!hasAimHit) {
+      // Fallback to action if aim_hit doesn't exist
+      handleAction()
+      return
+    }
+    
+    isAimHolding = true
+    spinePlayer.animationState.setAnimation(0, 'aim_hit', true) // true = loop
+    return
+  }
+  
+  handleAction()
+}
+
+const swapToAimSpine = async () => {
+  if (!spineCanvas) return
+  
+  try {
+    // Load aim spine data
+    const aimData = await loadSpineData('aim')
+    const uintArray = new Uint8Array(aimData.buffer)
+    const versionBytes = uintArray.slice(0, 16)
+    const versionString = new TextDecoder().decode(versionBytes).replace(/\0/g, '')
+
+    let usedSpine
+    if (/4\.0\.\d+/.test(versionString)) {
+      usedSpine = spine40
+    } else if (/4\.1\.\d+/.test(versionString)) {
+      usedSpine = spine41
+    } else {
+      usedSpine = spine41
+    }
+
+    // Create temporary aim player
+    const tempAimPlayer = new usedSpine.SpinePlayer('player-container', {
+      skelUrl: market.live2d.current_id + '_aim',
+      rawDataURIs: {
+        [market.live2d.current_id + '_aim']: aimData.skelURL
+      },
+      atlasUrl: getPathing('atlas', 'aim'),
+      animation: 'aim_hit',
+      skin: 'default',
+      backgroundColor: '#00000000',
+      alpha: true,
+      premultipliedAlpha: true,
+      mipmaps: false,
+      debug: false,
+      preserveDrawingBuffer: true,
+      viewport: spineViewport,
+      defaultMix: SPINE_DEFAULT_MIX,
+      success: (player: any) => {
+        spinePlayer = player
+        playVoice()
+        
+        // After aim_hit animation, swap back to cover
+        setTimeout(() => {
+          swapBackToCoverSpine()
+        }, 1500) // Adjust timing based on aim_hit duration
+      },
+      error: () => {
+        console.error('Failed to load aim spine')
+        // Fallback: just play action on current spine
+        handleAction()
+      }
+    })
+  } catch (error) {
+    console.warn('Aim spine not available:', error)
+    // Fallback: just play action on current spine
+    handleAction()
+  }
+}
+
+const swapBackToCoverSpine = async () => {
+  if (!spineCanvas) return
+  
+  try {
+    // Reload cover spine
+    const coverData = await loadSpineData('cover')
+    const uintArray = new Uint8Array(coverData.buffer)
+    const versionBytes = uintArray.slice(0, 16)
+    const versionString = new TextDecoder().decode(versionBytes).replace(/\0/g, '')
+
+    let usedSpine
+    if (/4\.0\.\d+/.test(versionString)) {
+      usedSpine = spine40
+    } else if (/4\.1\.\d+/.test(versionString)) {
+      usedSpine = spine41
+    } else {
+      usedSpine = spine41
+    }
+
+    // Create temporary cover player
+    const tempCoverPlayer = new usedSpine.SpinePlayer('player-container', {
+      skelUrl: market.live2d.current_id + '_cover',
+      rawDataURIs: {
+        [market.live2d.current_id + '_cover']: coverData.skelURL
+      },
+      atlasUrl: getPathing('atlas', 'cover'),
+      animation: 'cover_reload',
+      skin: 'default',
+      backgroundColor: '#00000000',
+      alpha: true,
+      premultipliedAlpha: true,
+      mipmaps: false,
+      debug: false,
+      preserveDrawingBuffer: true,
+      viewport: spineViewport,
+      defaultMix: SPINE_DEFAULT_MIX,
+      success: (player: any) => {
+        spinePlayer = player
+        // Queue cover_idle after cover_reload
+        spinePlayer.animationState.addAnimation(0, 'cover_idle', true, 0)
+      },
+      error: () => {
+        console.error('Failed to load cover spine')
+        // Fallback: reload the fullbody spine
+        loadSpineAfterWatcher()
+      }
+    })
+  } catch (error) {
+    console.warn('Cover spine not available:', error)
+    // Fallback: reload the fullbody spine
+    loadSpineAfterWatcher()
+  }
+}
+
+const playVoice = () => {
+  const characterData = l2dData.find((a) => a.id === market.live2d.current_id)
+  if (!characterData) return
+  
+  // Check if this character variant should use a different voice folder
+  const voiceFolderId = voiceGroupMap[characterData.id] || characterData.id
+  
+  // Get voices for current pose
+  // Map UI poses to voice poses: 'fb', 'aim', 'temp' -> 'normal', 'cover' -> 'cover'
+  let currentPose = 'normal'
+  if (market.live2d.current_pose === 'cover') {
+    currentPose = 'cover'
+  }
+  const voices = voiceMap[voiceFolderId]?.[currentPose]
+  
+  if (!voices || voices.length === 0) return
+  
+  // Create a unique key for this character and pose combination
+  const voiceKey = `${voiceFolderId}_${currentPose}`
+  
+  // Get current index or initialize to 0
+  let currentIndex = voiceIndexMap.get(voiceKey) ?? 0
+  
+  // Get the voice at current index
+  const voice = voices[currentIndex]
+  
+  // Increment index for next time, loop back to 0 when reaching end
+  currentIndex = (currentIndex + 1) % voices.length
+  voiceIndexMap.set(voiceKey, currentIndex)
+  
+  if (currentVoice) {
+    currentVoice.pause()
+    currentVoice.currentTime = 0
+  }
+
+  // play new voice
+  if (voice) {
+    currentVoice = new Audio(voice)
+    currentVoice.play()
+  }
+}
+
+const handleActionEnd = () => {
+  if (!spinePlayer) return
+  
+  // Release aim_hit animation when mouse is released
+  if (isAimHolding && market.live2d.current_pose === 'aim') {
+    isAimHolding = false
+    spinePlayer.animationState.setAnimation(0, 'aim_idle', true)
+  }
+}
 
 const SPINE_DEFAULT_MIX = 0.25
 let spinePlayer: any = null
+
+// Load spine data for a specific pose
+const loadSpineData = (pose: 'aim' | 'cover'): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const skelUrl = getPathing('skel', pose)
+    const request = new XMLHttpRequest()
+
+    request.responseType = 'arraybuffer'
+    request.open('GET', skelUrl, true)
+    request.timeout = 5000 // 5 second timeout
+    
+    request.onload = () => {
+      if (request.status === 404) {
+        console.warn(`${pose} skel file not found for ${market.live2d.current_id}`)
+        reject(new Error(`${pose} pose not available`))
+        return
+      }
+      
+      if (request.status !== 200) {
+        console.error(`Failed to load ${pose} skel file:`, request.statusText)
+        reject(new Error(`Failed to load ${pose} skel`))
+        return
+      }
+
+      const buffer = request.response
+      const frURL = new FileReader()
+      frURL.readAsArrayURL(new Blob([buffer]))
+      frURL.onload = () => {
+        resolve({
+          skelURL: frURL.result,
+          buffer: buffer
+        })
+      }
+      frURL.onerror = () => {
+        reject(new Error(`Failed to read ${pose} skel file`))
+      }
+    }
+    
+    request.onerror = () => {
+      reject(new Error(`Network error loading ${pose} skel`))
+    }
+    
+    request.ontimeout = () => {
+      reject(new Error(`Timeout loading ${pose} skel`))
+    }
+    
+    request.send()
+  })
+}
 
 const spineLoader = () => {
   const skelUrl = getPathing('skel')
@@ -109,6 +381,42 @@ const spineLoader = () => {
 
           spinePlayer = player
           market.live2d.attachments = player.animationState.data.skeletonData.defaultSkin.attachments
+          
+          // Validate that the current animation exists
+          const animations = player.animationState.data.skeletonData.animations
+          const currentAnimation = player.config.animation
+          const animationExists = animations.some((a: { name: string }) => a.name === currentAnimation)
+          
+          if (!animationExists) {
+            // Fallback to 'idle' if current animation doesn't exist
+            console.warn(`Animation '${currentAnimation}' not found, falling back to 'idle'`)
+            player.config.animation = 'idle'
+            player.setAnimation('idle', true)
+          }
+          
+          // Auto-detect and apply best available skin if in fb pose
+          if (market.live2d.current_pose === 'fb') {
+            const availableSkins = player.animationState.data.skeletonData.skins
+            if (availableSkins && availableSkins.length > 0) {
+              const skinNames = availableSkins.map((s: any) => s.name)
+              let bestSkin = 'default'
+              
+              // Prefer bg, then acc, then first available non-default
+              if (skinNames.includes('bg')) {
+                bestSkin = 'bg'
+              } else if (skinNames.includes('acc')) {
+                bestSkin = 'acc'
+              } else if (skinNames.length > 1) {
+                // Use first non-default skin
+                bestSkin = skinNames.find((name: string) => name !== 'default') || 'default'
+              }
+              
+              if (bestSkin !== 'default') {
+                player.skeleton.setSkinByName(bestSkin)
+              }
+            }
+          }
+          
           market.live2d.triggerFinishedLoading()
           successfullyLoaded()
         },
@@ -187,7 +495,7 @@ const customSpineLoader = () => {
   spineCanvas = new usedSpine.SpinePlayer('player-container', spineCanvasOptions)
 }
 
-const getPathing = (extension: string) => {
+const getPathing = (extension: string, pose?: 'aim' | 'cover' | 'fb') => {
   let route = globalParams.PATH_L2D + market.live2d.current_id + '/'
 
   const id = market.live2d.current_id
@@ -195,7 +503,9 @@ const getPathing = (extension: string) => {
 
   let fileSuffix = '_00.'
 
-  switch (market.live2d.current_pose) {
+  const targetPose = pose || market.live2d.current_pose
+
+  switch (targetPose) {
     case 'aim':
       route += globalParams.PATH_L2D_AIM
       fileSuffix = '_aim' + fileSuffix
@@ -216,7 +526,7 @@ const getPathing = (extension: string) => {
   return route
 }
 
-const getDefaultAnimation = () => {
+const getDefaultAnimation = (availableAnimations?: Array<{ name: string }>) => {
   if (market.live2d.current_id === 'mbg004_appearance') {
     return 'mbg004_appearance'
   }
@@ -240,9 +550,93 @@ const getDefaultAnimation = () => {
   }
 }
 
+const checkCharacterHasPose = (pose: 'fb' | 'aim' | 'cover' | 'temp'): boolean => {
+  // Characters that don't have aim pose
+  const noAimCharacters = ['c992', 'c9019', 'c990', 'c989', 'c994'] // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
+  
+  // Characters that don't have cover pose
+  const noCoverCharacters = ['c992', 'c9019', 'c990', 'c989', 'c994'] // same as above
+  
+  if (pose === 'aim' && noAimCharacters.includes(market.live2d.current_id)) {
+    return false
+  }
+  
+  if (pose === 'cover' && noCoverCharacters.includes(market.live2d.current_id)) {
+    return false
+  }
+  
+  return true
+}
+
+// Helper function to verify if a pose file exists
+const verifyPoseFileExists = async (pose: 'aim' | 'cover'): Promise<boolean> => {
+  try {
+    const skelUrl = getPathing('skel', pose)
+    const response = await fetch(skelUrl, { method: 'HEAD' })
+    return response.ok
+  } catch (error) {
+    return false
+  }
+}
+
+import l2dData, { voiceMap, voiceGroupMap, setCustomZoom } from '@/utils/json/l2d.js'
+
+let currentVoice = null as null | HTMLAudioElement
+let isAimHolding = false
+
+// Track voice index for sequential playback
+const voiceIndexMap = new Map<string, number>()
+
+const handleAction = () => {
+  if (!spinePlayer) return
+  
+  // Get available animations
+  const animations = spinePlayer.animationState.data.skeletonData.animations
+  const animationNames = animations.map((a: { name: string }) => a.name)
+  
+  // Determine action animation based on current pose
+  let actionAnimation = 'action'
+  
+  // For favorite characters, use expression_merged instead
+  if (market.live2d.current_id.includes('favorite')) {
+    actionAnimation = 'expression_merged'
+  }
+  
+  // Check if action animation exists, if not just play voice
+  if (!animationNames.includes(actionAnimation)) {
+    playVoice()
+    return
+  }
+  
+  spinePlayer.animationState.setAnimation(0, actionAnimation, false)
+
+  playVoice()
+
+  // Determine idle animation based on current pose
+  let idleAnimation = 'idle'
+  if (market.live2d.current_id.includes('favorite')) {
+    idleAnimation = 'idle_merged'
+  } else if (['smol_anis', 'smol_prika', 'smol_mint'].includes(market.live2d.current_id)) {
+    idleAnimation = 'pose_idle'
+  }
+
+  // back to idle after action finish (only if idle animation exists)
+  if (animationNames.includes(idleAnimation)) {
+    spinePlayer.animationState.addAnimation(0, idleAnimation, true, 0)
+  }
+}
+
 const successfullyLoaded = () => {
   market.load.endLoad()
-  market.message.getMessage().success(messagesEnum.MESSAGE_ASSET_LOADED, market.message.short_message)
+  // market.message.getMessage().success(messagesEnum.MESSAGE_ASSET_LOADED, market.message.short_message)
+
+  // Apply custom zoom after spine loads successfully
+  setTimeout(() => {
+    canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+    if (canvas) {
+      transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale)
+    }
+  }, 50)
 
   checkIfAssetCanYap()
 }
@@ -267,13 +661,55 @@ watch(
 watch(
   () => market.live2d.current_id,
   () => {
+    // Stop current BGM if playing
+    if (currentBGM) {
+      currentBGM.pause()
+      currentBGM.currentTime = 0
+      currentBGM = null
+    }
+    
+    // Play BGM for oldtales
+    if (market.live2d.current_id === 'oldtales') {
+      currentBGM = new Audio('/src/assets/voice/oldtales/oldtales_bgm.mp3')
+      currentBGM.loop = true
+      currentBGM.volume = 0.5
+      currentBGM.play().catch(err => console.log('BGM play failed:', err))
+    }
+    
     loadSpineAfterWatcher()
+    
+    // Apply custom zoom after spine loads - wait longer for canvas to be ready
+    setTimeout(() => {
+      canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+      if (canvas) {
+        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale)
+      }
+    }, 300)
   }
 )
 
 watch(
   () => market.live2d.current_pose,
-  () => {
+  async () => {
+    // Check if the character has the required spine files for this pose
+    const hasRequiredFiles = checkCharacterHasPose(market.live2d.current_pose)
+    
+    if (!hasRequiredFiles) {
+      // Fallback to fb pose if the requested pose doesn't exist
+      market.live2d.current_pose = 'fb'
+      return
+    }
+    
+    // For aim and cover poses, verify the file actually exists
+    if (market.live2d.current_pose === 'aim' || market.live2d.current_pose === 'cover') {
+      const fileExists = await verifyPoseFileExists(market.live2d.current_pose)
+      if (!fileExists) {
+        console.warn(`${market.live2d.current_pose} pose file not found for ${market.live2d.current_id}, falling back to fb`)
+        market.live2d.current_pose = 'fb'
+        return
+      }
+    }
+    
     loadSpineAfterWatcher()
   }
 )
@@ -446,6 +882,13 @@ async function exportAnimationFrames(timestamp: number) {
 
 const loadSpineAfterWatcher = () => {
   if (market.live2d.canLoadSpine) {
+    // Verify the character has the required pose before attempting to load
+    if (!checkCharacterHasPose(market.live2d.current_pose)) {
+      console.warn(`Character ${market.live2d.current_id} does not have ${market.live2d.current_pose} pose, falling back to fb`)
+      market.live2d.current_pose = 'fb'
+      return
+    }
+    
     spineCanvas.dispose()
     market.load.beginLoad()
     spineLoader()

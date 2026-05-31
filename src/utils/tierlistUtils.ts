@@ -1,6 +1,6 @@
 import type { tierlist } from '@/utils/interfaces/tierlist/tierlist'
-import l2d from '@/utils/json/l2d.json'
 import type { live2d_interface } from '@/utils/interfaces/live2d'
+import l2dData from '@/utils/json/l2d.js'
 import type { tier } from '@/utils/interfaces/tierlist/tier'
 import { returnRandomHex } from '@/utils/utils'
 import { globalParams } from '@/utils/enum/globalParams'
@@ -25,7 +25,7 @@ const initBenchTier = (): tier => {
   benchTier.color_bg = '#8d96a6'
   benchTier.color_name = '#000000'
 
-  const base_array: live2d_interface[] = l2d
+  const base_array: live2d_interface[] = l2dData as unknown as live2d_interface[]
   base_array.forEach((item) => {
     if (item.tl === 'nikke' || item.tl === 'NPC') {
       benchTier.items.push({
@@ -102,7 +102,7 @@ const retrieveTierListFromLocalStorage = (slot: number = 0): tierlist => {
 }
 
 const checkForMissingCharactersAndAddToBench = (tierlist: tierlist): tierlist => {
-  const base_array: live2d_interface[] = l2d
+  const base_array: live2d_interface[] = l2dData as unknown as live2d_interface[]
 
   base_array.forEach((item) => {
     if (item.tl === 'nikke' || item.tl === 'NPC') {

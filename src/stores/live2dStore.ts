@@ -1,7 +1,8 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { type AttachmentInterface, type live2d_interface } from '@/utils/interfaces/live2d'
-import l2d from '@/utils/json/l2d.json'
+import l2dData from '@/utils/json/l2d.js'
+
 
 // that shit long as hell
 export const useLive2dStore = defineStore('live2d', () => {
@@ -59,7 +60,7 @@ export const useLive2dStore = defineStore('live2d', () => {
   const customLoader = ref<'skel' | 'json'>('skel') // whether the load a skel or json
 
   const filter = () => {
-    const base_array: live2d_interface[] = l2d
+    const base_array: live2d_interface[] = l2dData as unknown as live2d_interface[]
     filtered_l2d_Array.value = base_array.sort(
       (a: live2d_interface, b: live2d_interface) => {
         return a.name.localeCompare(b.name)
@@ -188,6 +189,24 @@ export const useLive2dStore = defineStore('live2d', () => {
     }
   }
 
+  const hasSpecialSkin = () => {
+    const skin = getSkinFb()
+    return skin !== 'default'
+  }
+
+  const getDefaultSkinWithFallback = () => {
+    const skin = getSkinFb()
+    
+    // If skin has "bg", prefer it; otherwise fall back to "acc"
+    if (skin.includes('bg')) {
+      return 'bg'
+    } else if (skin.includes('acc')) {
+      return 'acc'
+    }
+    
+    return skin
+  }
+
   const initCustomSkel = (skel: File) => {
     fr.readAsDataURL(skel)
     fr.onload = () => {
@@ -284,6 +303,8 @@ export const useLive2dStore = defineStore('live2d', () => {
     exportAnimationColoredBackground,
     exportAnimation,
     getSkin,
+    hasSpecialSkin,
+    getDefaultSkinWithFallback,
     customSkel,
     initCustomSkel,
     customPng,

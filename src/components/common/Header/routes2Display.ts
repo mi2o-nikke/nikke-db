@@ -5,26 +5,6 @@ export interface route2DisplayInterface {
 }
 
 export const ROUTES: route2DisplayInterface[] = [
-  {
-    path: 'tools',
-    text: 'Tools',
-    mobile: true
-  },
-  {
-    path: 'visualiser',
-    text: 'Live2D Visualiser',
-    mobile: true
-  },
-  {
-    path: 'chibi',
-    text: 'Chibi',
-    mobile: true
-  },
-  {
-    path: 'gallery',
-    text: 'Gallery',
-    mobile: true
-  }
   // {
   //   path: 'tierlistmaker',
   //   text: 'Tier List Maker',

@@ -1,18 +1,5 @@
 <template>
   <div class="flexbox main-bg main-box-shadow">
-    <!-- <div class="githubwrapper">
-      <n-tooltip trigger="hover" placement="bottom">
-        <template #trigger>
-          <n-icon :component="GithubFilled" class="github" @click="sendToGithub()" size="50"/>
-        </template>
-        View the source code on GitHub
-      </n-tooltip>
-    </div> -->
-    <!-- <span>
-      <RouterLink to="/">
-        <img :src="logo" class="logo" />
-      </RouterLink>
-    </span> -->
     <span class="routes">
       <RouterLink
         v-for="route in props.routes"
@@ -55,7 +42,7 @@ const sendToGithub = () => {
   width: 100%;
   position: relative;
   top: 30px;
-  left: 1510px;
+  left: 0px;
   z-index: 10;
 
   span {

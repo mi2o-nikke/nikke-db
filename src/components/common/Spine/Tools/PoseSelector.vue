@@ -4,7 +4,9 @@
     v-model:value="market.live2d.current_pose"
   >
     <span v-for="pose in poses" :key="pose.value">
-      <n-radio :key="pose.value" :value="pose.value" :label="pose.label" />
+      <n-radio :key="pose.value" :value="pose.value">
+        <component :is="pose.label" />
+      </n-radio>
       <br />
     </span>
   </n-radio-group>
@@ -65,3 +67,4 @@ div {
   border-bottom: none !important;
 }
 </style>
+//
