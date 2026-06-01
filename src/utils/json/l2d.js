@@ -323,8 +323,8 @@ const l2dData = [
   { 'group': 'T.T. STAR', 'name': 'Mint: Star', 'id': 'c600' },
   { 'group': 'T.T. STAR', 'name': 'Mint', 'id': 'c600_01' },
   { 'group': 'T.T. STAR', 'name': 'Mint: Training', 'id': 'c600_02' },
-  { 'group': 'T.T. STAR', 'name': 'Prika', 'id': 'c601' },
-  { 'group': 'T.T. STAR', 'name': 'Prika: Star', 'id': 'c601_01' },
+  { 'group': 'T.T. STAR', 'name': 'Prika: Star', 'id': 'c601' },
+  { 'group': 'T.T. STAR', 'name': 'Prika', 'id': 'c601_01' },
   { 'group': 'T.T. STAR', 'name': 'Prika: Training', 'id': 'c601_02' },
   { 'group': 'T.T. STAR', 'name': 'Anis', 'id': 'c9021' },
   { 'group': 'T.T. STAR', 'name': 'Anis: Training', 'id': 'c9021_01' },
@@ -710,6 +710,7 @@ const l2dData = [
   { 'group': '__Event', 'name': 'Good World', 'id': 'goodworld' },
   { 'group': '__Event', 'name': 'Star Anis', 'id': 'staranis' },
   { 'group': '__Event', 'name': 'B-side Idol', 'id': 'bsideidol' },
+  { 'group': '__Event', 'name': 'Bitter Spice', 'id': 'bitterspice' },
 
   { 'group': '__Story', 'name': 'Story 00-01', 'id': 'story0001' },
   { 'group': '__Story', 'name': 'Story 00-01 no filter', 'id': 'story0001_2' },
