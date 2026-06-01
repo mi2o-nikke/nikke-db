@@ -207,7 +207,10 @@ const playVoice = () => {
   if (!characterData) return
   
   // Check if this character variant should use a different voice folder
-  const voiceFolderId = voiceGroupMap[characterData.id] || characterData.id
+  // Extract base character ID (e.g., 'c271_01' -> 'c271')
+  const baseCharacterId = characterData.id.split('_')[0]
+  // If base ID is in the list, use it; otherwise use the full character ID
+  const voiceFolderId = voiceGroupList.includes(baseCharacterId) ? baseCharacterId : characterData.id
   
   // Get voices for current pose
   // Map UI poses to voice poses: 'fb', 'aim', 'temp' -> 'normal', 'cover' -> 'cover'
@@ -242,6 +245,63 @@ const playVoice = () => {
     currentVoice = new Audio(voice)
     currentVoice.play()
   }
+  
+  // Stop any existing sound effects first
+  stopAllSoundEffects()
+  
+  // In cover mode, also play reload sound simultaneously
+  if (market.live2d.current_pose === 'cover') {
+    playReloadSound()
+  }
+  
+  // In fullbody mode, also play action sound simultaneously
+  if (market.live2d.current_pose === 'fb') {
+    playActionSound()
+  }
+}
+
+const stopAllSoundEffects = () => {
+  // Stop reload sound
+  if (currentReloadSound) {
+    currentReloadSound.pause()
+    currentReloadSound.currentTime = 0
+    currentReloadSound = null
+  }
+  
+  // Stop action sound
+  if (currentActionSound) {
+    currentActionSound.pause()
+    currentActionSound.currentTime = 0
+    currentActionSound = null
+  }
+}
+
+const playReloadSound = () => {
+  // Get base character ID for reload sound (always stored in base folder)
+  // e.g., 'c271_01' -> 'c271'
+  const baseCharacterId = market.live2d.current_id.split('_')[0]
+  
+  // Construct reload sound path: /src/assets/voice/{characterId}/{characterId}_re.mp3
+  const reloadSoundPath = `/src/assets/voice/${baseCharacterId}/${baseCharacterId}_re.mp3`
+  
+  // Try to play reload sound
+  currentReloadSound = new Audio(reloadSoundPath)
+  currentReloadSound.play().catch((error) => {
+    // Silently fail if reload sound doesn't exist
+    console.debug(`Reload sound not found for ${voiceFolderId}:`, error.message)
+  })
+}
+
+const playActionSound = () => {
+  // Construct action sound path: /src/assets/voice/{characterId}/{characterId}_ca.mp3
+  const actionSoundPath = `/src/assets/voice/${market.live2d.current_id}/${market.live2d.current_id}_ca.mp3`
+  
+  // Try to play action sound
+  currentActionSound = new Audio(actionSoundPath)
+  currentActionSound.play().catch((error) => {
+    // Silently fail if action sound doesn't exist
+    console.debug(`Action sound not found for ${market.live2d.current_id}:`, error.message)
+  })
 }
 
 const handleActionEnd = () => {
@@ -593,9 +653,11 @@ const verifyPoseFileExists = async (pose: 'aim' | 'cover'): Promise<boolean> => 
   }
 }
 
-import l2dData, { voiceMap, voiceGroupMap, setCustomZoom } from '@/utils/json/l2d.js'
+import l2dData, { voiceMap, voiceGroupList, setCustomZoom } from '@/utils/json/l2d.js'
 
 let currentVoice = null as null | HTMLAudioElement
+let currentReloadSound = null as null | HTMLAudioElement
+let currentActionSound = null as null | HTMLAudioElement
 let isAimHolding = false
 
 // Track voice index for sequential playback
@@ -705,6 +767,9 @@ watch(
 watch(
   () => market.live2d.current_pose,
   async () => {
+    // Stop any playing sound effects when switching poses
+    stopAllSoundEffects()
+    
     // Check if the character has the required spine files for this pose
     const hasRequiredFiles = checkCharacterHasPose(market.live2d.current_pose)
     

@@ -77,7 +77,7 @@ const l2dData = [
   { 'group': 'Counters', 'name': 'Rapi Classic Vacation', 'id': 'c010_03' },
   { 'group': 'Counters', 'name': 'Neon', 'id': 'c011' },
   { 'group': 'Counters', 'name': 'Neon Bling Bullet', 'id': 'c011_01' },
-  { 'group': 'Counters', 'name': 'Anis', 'id': 'c012' },  
+  { 'group': 'Counters', 'name': 'Anis', 'id': 'c012' },
   { 'group': 'Counters', 'name': 'Neon: Blue Ocean', 'id': 'c014' },
   { 'group': 'Counters', 'name': 'Anis: Sparkling Summer', 'id': 'c015' },
   { 'group': 'Counters', 'name': 'Rapi: Red Hood', 'id': 'c016' },
@@ -178,9 +178,9 @@ const l2dData = [
   { 'group': 'Inherit', 'name': 'Isabel', 'id': 'c231' },
   { 'group': 'Inherit', 'name': 'Isabel Honeymoon Party', 'id': 'c231_01' },
   { 'group': 'Inherit', 'name': 'Noah', 'id': 'c232' },
-  
-  { 'group': 'Liaozhai', 'name': 'Ying Ning', 'id': 'c8004' },  
-  { 'group': 'Liaozhai', 'name': 'Hua Pi', 'id': 'c8005' },  
+
+  { 'group': 'Liaozhai', 'name': 'Ying Ning', 'id': 'c8004' },
+  { 'group': 'Liaozhai', 'name': 'Hua Pi', 'id': 'c8005' },
   { 'group': 'Liaozhai', 'name': 'Ying Ning Fox', 'id': 'c8006' },
 
   { 'group': 'M.M.R.', 'name': 'Mana', 'id': 'c290' },
@@ -317,7 +317,7 @@ const l2dData = [
   { 'group': 'Seraphim', 'name': 'Pepper', 'id': 'c131' },
   { 'group': 'Seraphim', 'name': 'Pepper Ocean Vitamin', 'id': 'c131_01' },
   { 'group': 'Seraphim', 'name': 'Mary: Bay Goddess', 'id': 'c132' },
-  
+
   { 'group': 'Shade', 'name': 'Velvet', 'id': 'c9004' },
 
   { 'group': 'T.T. STAR', 'name': 'Mint: Star', 'id': 'c600' },
@@ -376,7 +376,7 @@ const l2dData = [
   { 'group': 'Unlimited', 'name': 'Tove@Favorite', 'id': 'favorite_c192' },
 
   { 'group': 'Veiled Order', 'name': 'Snow Crane', 'id': 'c620' },
-  
+
   { 'group': 'Wardress', 'name': 'Yuni', 'id': 'c160' },
   { 'group': 'Wardress', 'name': 'Yuni Pretty In Pink', 'id': 'c160_01' },
   { 'group': 'Wardress', 'name': 'Mihara', 'id': 'c161' },
@@ -547,7 +547,7 @@ const l2dData = [
   { 'group': '_Other', 'name': 'Smol: Rapi', 'id': 'smol_rapi' },
   { 'group': '_Other', 'name': 'Smol: Rem', 'id': 'smol_rem' },
   { 'group': '_Other', 'name': 'Smol: Sin Pirate', 'id': 'smol_sin_pirate' },
-  { 'group': '_Other', 'name': 'Smol: Yan', 'id': 'smol_yan' },  
+  { 'group': '_Other', 'name': 'Smol: Yan', 'id': 'smol_yan' },
 
   { 'group': '__Collab Airborne Squad', 'name': 'EVE', 'id': 'c850' },
   { 'group': '__Collab Airborne Squad', 'name': 'EVE Keyhole Dress', 'id': 'c850_01' },
@@ -614,7 +614,7 @@ const l2dData = [
   { 'group': '__Collab WILLE', 'name': 'Asuka Shikinami Final Battle', 'id': 'c835_01' },
   { 'group': '__Collab WILLE', 'name': 'Asuka Shikinami Ocean\'s Lament', 'id': 'c835_02' },
   { 'group': '__Collab WILLE', 'name': 'Sakura Suzuhara', 'id': 'c836' },
-  
+
   { 'group': '__Collab YoRHa', 'name': '2B', 'id': 'c810' },
   { 'group': '__Collab YoRHa', 'name': '2B Metamorphic Damage', 'id': 'c810_01' },
   { 'group': '__Collab YoRHa', 'name': '2B YoRHa Uniform 1', 'id': 'c810_02' },
@@ -768,54 +768,55 @@ const customZoomSettings = {
   'staranis': { zoom: 0.35, offsetX: 100, offsetY: 0 },
 }
 
-const voiceGroupMap = {
-  'c271_01': 'c271',
-  'c271_02': 'c271',
-  'c032_01': 'c032',
-  'c030_01': 'c030',
-  'c030_02': 'c030',
-  'c090_02': 'c090',
-  'c091_01': 'c091',
-  'c093_01': 'c093',
-  'c095_01': 'c095',
-  'c350_01': 'c350',
-  'c352_01': 'c352',
-}
+// voiceGroupList: Character IDs that share voices with their variants
+// Any character variant starting with these IDs will use the base ID's voice folder
+// e.g., c271_01, c271_02 will use c271's voice folder
+const voiceGroupList = [
+  'c271',
+  'c032',
+  'c030',
+  'c090',
+  'c091',
+  'c093',
+  'c095',
+  'c350',
+  'c352',
+]
 
 const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
   // Create a pose-specific key for zoom settings
   const zoomKey = currentPose === 'fb' ? characterId : `${characterId}_${currentPose}`
-  
+
   if (customZoomSettings[zoomKey]) {
     const settings = customZoomSettings[zoomKey]
     transformScale = settings.zoom
-    
+
     if (canvas) {
       canvas.style.transform = 'scale(' + transformScale + ')'
-      
+
       // Store the current position as base if not already stored
       if (!canvas.dataset.baseLeft) {
         canvas.dataset.baseLeft = canvas.style.left || '0px'
         canvas.dataset.baseTop = canvas.style.top || '0px'
       }
-      
+
       // Apply offsets relative to the stored base position to prevent accumulation
       const baseLeft = parseInt(canvas.dataset.baseLeft.replaceAll('px', '')) || 0
       const baseTop = parseInt(canvas.dataset.baseTop.replaceAll('px', '')) || 0
-      
+
       canvas.style.left = (baseLeft + (settings.offsetX || 0)) + 'px'
       canvas.style.top = (baseTop + (settings.offsetY || 0)) + 'px'
     }
-    
+
     return transformScale
   }
-  
+
   // Reset base position tracking when no custom settings apply
   if (canvas) {
     canvas.dataset.baseLeft = ''
     canvas.dataset.baseTop = ''
   }
-  
+
   return transformScale
 }
 
@@ -827,25 +828,31 @@ Object.entries(voiceModules).forEach(([path, module]) => {
   if (match) {
     const folderName = match[1]
     const filename = match[2]
-    
+
     const numberMatch = filename.match(/_(\d+)$/)
     if (!numberMatch) return
-    
+
     const voiceNumber = parseInt(numberMatch[1])
-    
+
     let pose = 'normal'
     if (voiceNumber >= 7) {
       pose = 'cover'
     }
-    
-    if (!voiceMap[folderName]) {
-      voiceMap[folderName] = {}
+
+    // Handle CA variants - store them under their own character ID
+    let characterId = folderName
+    if (filename.includes('_ca')) {
+      characterId = filename.replace(/(_\d+)$/, '')
     }
-    if (!voiceMap[folderName][pose]) {
-      voiceMap[folderName][pose] = []
+
+    if (!voiceMap[characterId]) {
+      voiceMap[characterId] = {}
     }
-    
-    voiceMap[folderName][pose].push(module.default)
+    if (!voiceMap[characterId][pose]) {
+      voiceMap[characterId][pose] = []
+    }
+
+    voiceMap[characterId][pose].push(module.default)
   }
 })
 
@@ -861,5 +868,5 @@ l2dData.forEach((character) => {
   }
 })
 
-export { voiceMap, voiceGroupMap, setCustomZoom, customZoomSettings }
+export { voiceMap, voiceGroupList, setCustomZoom, customZoomSettings }
 export default l2dData
