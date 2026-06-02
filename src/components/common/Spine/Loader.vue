@@ -28,11 +28,13 @@ let currentBGM: HTMLAudioElement | null = null
 
 // http://esotericsoftware.com/spine-player#Viewports
 const spineViewport = {
-  padLeft: '0%',
-  padRight: '0%',
-  padTop: '0%',
-  padBottom: '0%'
+  padLeft: '20%',
+  padRight: '20%',
+  padTop: '20%',
+  padBottom: '20%'
 }
+
+const spineScale = 1.2
 
 onMounted(() => {
   market.load.beginLoad()
@@ -125,6 +127,7 @@ const swapToAimSpine = async () => {
       debug: false,
       preserveDrawingBuffer: true,
       viewport: spineViewport,
+      scale: spineScale,
       defaultMix: SPINE_DEFAULT_MIX,
       success: (player: any) => {
         spinePlayer = player
@@ -183,6 +186,7 @@ const swapBackToCoverSpine = async () => {
       debug: false,
       preserveDrawingBuffer: true,
       viewport: spineViewport,
+      scale: spineScale,
       defaultMix: SPINE_DEFAULT_MIX,
       success: (player: any) => {
         spinePlayer = player
@@ -414,6 +418,7 @@ const spineLoader = () => {
         atlasUrl: getPathing('atlas'),
         animation: getDefaultAnimation(),
         skin: market.live2d.getSkin(),
+        scale: spineScale,
         backgroundColor: '#00000000',
         alpha: true,
         premultipliedAlpha: true,
@@ -988,7 +993,7 @@ const applyDefaultStyle2Canvas = () => {
     } else {
       canvas.style.height = market.live2d.HQassets ? '438vh' : '168vh'
       canvas.style.marginTop = market.live2d.HQassets ? 'calc(-171vh)' : 'calc(-30vh)'
-      canvas.style.transform = market.live2d.HQassets ? 'scale(0.21)' : 'scale(0.5)'
+      canvas.style.transform = market.live2d.HQassets ? 'scale(0.294)' : 'scale(0.7)'
       canvas.style.position = 'absolute'
       canvas.style.left = '0px'
       canvas.style.top = '0px'
