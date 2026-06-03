@@ -765,6 +765,7 @@ const specialClickAnimations = {
 }
 
 const customZoomSettings = {
+  'c017': { zoom: 0.23, offsetX: 0, offsetY: -50 },
   'c017_01': { zoom: 0.26, offsetX: 0, offsetY: -80 },
   'c018': { zoom: 0.23, offsetX: 0 },
   'c140': { offsetX: 80 },
