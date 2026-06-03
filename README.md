@@ -12,3 +12,8 @@ _______________________________________________________
 2. npm run dev
 
 OR just run the bat file in folder "_run.bat", first time it might close automatically just reopen the .bat file again
+
+
+_______________________________________________________
+im missing these nikke might have no soundeffect
+1. Neon: Blue Ocean
