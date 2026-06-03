@@ -7,6 +7,9 @@
       <n-card :bordered="false" size="small" class="toolCardContent">
         <div class="toolListDiv">
           <PoseSelector />
+        </div>
+
+        <div class="toolListDiv">
           <Yapping />
         </div>
 
@@ -88,6 +91,7 @@ const market = useMarket()
   right: 20px;
   width: 150px;
   min-height: calc(85vh - 120px);
+  z-index: 1001;
 
   .n-card {
     border-radius: 0px;

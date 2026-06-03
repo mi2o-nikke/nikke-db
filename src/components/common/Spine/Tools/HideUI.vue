@@ -1,5 +1,5 @@
 <template>
-  <n-button ghost type="success" round @click="hideUI()">Hide UI</n-button>
+  <n-button ghost type="success" round @click="hideUI()">Hide UI ⎵</n-button>
 </template>
 
 <script setup lang="ts">
@@ -13,9 +13,21 @@ const hideUI = () => {
   market.message.getMessage().success(messagesEnum.MESSAGE_UI_SHOWBACK, market.message.long_message)
 }
 
-document.addEventListener('keypress', (e) => {
-  if (e.key.toLowerCase() === 'enter') {
-    market.live2d.triggerShowUI()
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    // Check if the user is typing in an input field
+    const target = e.target as HTMLElement
+    const isInputField = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
+    
+    if (!isInputField) {
+      e.preventDefault()
+      if (market.live2d.hideUI) {
+        market.live2d.triggerShowUI()
+      } else {
+        market.live2d.triggerHideUI()
+        market.message.getMessage().success(messagesEnum.MESSAGE_UI_SHOWBACK, market.message.long_message)
+      }
+    }
   }
 })
 </script>

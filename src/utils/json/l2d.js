@@ -759,49 +759,62 @@ const l2dData = [
 
 ]
 
-const customZoomSettings = {
-  'c352_01': { zoom: 0.3, offsetX: 0, offsetY: -180 },
-  'favorite_c030': { zoom: 0.24, offsetX: 60, offsetY: 0 },
-  'favorite_c032': { zoom: 0.3, offsetX: 60, offsetY: 0 },
-  'favorite_c112': { zoom: 0.28, offsetX: 60, offsetY: 0 },
-  'favorite_c352': { zoom: 0.34, offsetX: 60, offsetY: 0 },
-  'oldtales': { zoom: 0.52, offsetX: 0, offsetY: 0 },
-  'staranis': { zoom: 0.35, offsetX: 100, offsetY: 0 },
+const specialClickAnimations = {
+  'c011': ['expression_0'],
+  'c412_01': ['expression_0', 'expression_1'],
 }
 
-// voiceGroupList: Character IDs that share voices with their variants
-// Any character variant starting with these IDs will use the base ID's voice folder
-// e.g., c271_01, c271_02 will use c271's voice folder
-const voiceGroupList = [
-  'c271',
-  'c032',
-  'c030',
-  'c090',
-  'c091',
-  'c093',
-  'c095',
-  'c350',
-  'c352',
-]
+const customZoomSettings = {
+  'c017_01': { zoom: 0.26, offsetX: 0, offsetY: -80 },
+  'c018': { zoom: 0.23, offsetX: 0 },
+  'c140': { offsetX: 80 },
+  'c140_01': { offsetX: 80 },
+  'c140_02': { offsetX: 80 },
+  'c352_01': { zoom: 0.3, offsetX: 0, offsetY: -180 },
+  'favorite_c030': { zoom: 0.24, offsetX: 60 },
+  'favorite_c032': { zoom: 0.3, offsetX: 60 },
+  'favorite_c112': { zoom: 0.28, offsetX: 60 },
+  'favorite_c141': { zoom: 0.35, offsetX: 60, offsetY: -60 },
+  'favorite_c142': { zoom: 0.31, offsetX: 60, offsetY: -60 },
+  'favorite_c352': { zoom: 0.34, offsetX: 60 },
+  'oldtales': { zoom: 0.52 },
+  'staranis': { zoom: 0.35, offsetX: 100 },
+}
+
+const voiceGroupOverrides = {
+  'c010': ['c010_01', 'c010_02', 'c010_03'],
+  'c011': ['c011_01'],
+  'c016': ['c016_03'],
+  'c030': ['c030_01', 'c030_02'],
+  'c032': ['c032_01'],
+  'c090': ['c090_02'],
+  'c091': ['c091_01'],
+  'c093': ['c093_01'],
+  'c095': ['c095_01'],
+  'c140': ['c140_01', 'c140_02'],
+  'c141': ['c141_01'],
+  'c142': ['c142_01'],
+  'c271': ['c271_01', 'c271_02'],
+  'c350': ['c350_01'],
+  'c352': ['c352_01'],
+  'c412': ['c412_01'],
+}
 
 const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
-  // Create a pose-specific key for zoom settings
   const zoomKey = currentPose === 'fb' ? characterId : `${characterId}_${currentPose}`
 
   if (customZoomSettings[zoomKey]) {
-    const settings = customZoomSettings[zoomKey]
-    transformScale = settings.zoom
+    const settings = customZoomSettings[zoomKey] ?? 1
+    transformScale = settings.zoom * 1.4
 
     if (canvas) {
-      canvas.style.transform = 'scale(' + transformScale + ')'
+      canvas.style.transform = 'scale(' +  transformScale + ')'
 
-      // Store the current position as base if not already stored
       if (!canvas.dataset.baseLeft) {
         canvas.dataset.baseLeft = canvas.style.left || '0px'
         canvas.dataset.baseTop = canvas.style.top || '0px'
       }
 
-      // Apply offsets relative to the stored base position to prevent accumulation
       const baseLeft = parseInt(canvas.dataset.baseLeft.replaceAll('px', '')) || 0
       const baseTop = parseInt(canvas.dataset.baseTop.replaceAll('px', '')) || 0
 
@@ -812,7 +825,6 @@ const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
     return transformScale
   }
 
-  // Reset base position tracking when no custom settings apply
   if (canvas) {
     canvas.dataset.baseLeft = ''
     canvas.dataset.baseTop = ''
@@ -840,7 +852,6 @@ Object.entries(voiceModules).forEach(([path, module]) => {
       pose = 'cover'
     }
 
-    // Handle CA variants - store them under their own character ID
     let characterId = folderName
     if (filename.includes('_ca')) {
       characterId = filename.replace(/(_\d+)$/, '')
@@ -869,5 +880,5 @@ l2dData.forEach((character) => {
   }
 })
 
-export { voiceMap, voiceGroupList, setCustomZoom, customZoomSettings }
+export { voiceMap, voiceGroupOverrides, setCustomZoom, customZoomSettings, specialClickAnimations }
 export default l2dData

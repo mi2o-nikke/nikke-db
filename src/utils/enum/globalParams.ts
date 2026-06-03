@@ -31,7 +31,7 @@ enum messagesEnum {
   MESSAGE_PROCESSING = 'Processing',
   MESSAGE_UNLOAD = "Unloaded older asset successfully",
   MESSAGE_WRONG_FILE_FORMAT = "Wrong file format",
-  MESSAGE_UI_SHOWBACK = "Press the \"Enter\" key to show the UI back",
+  MESSAGE_UI_SHOWBACK = "Press the \"Spacebar\" key to show the UI back",
   MESSAGE_TIERLIST_DELETE_ROW = "Row deleted, characters that were in that row have been transferred to the bench",
   MESSAGE_TIERLIST_UPDATED_ROW = "Row updated",
   MESSAGE_TIERLIST_SCREENSHOT_CONVERT2CANVAS = "Converting HTML data to a canvas object...",

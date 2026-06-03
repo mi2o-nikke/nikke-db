@@ -1,10 +1,17 @@
 <template>
-  <n-checkbox v-model:checked="market.live2d.isYapping" :disabled="!market.live2d.canYap">
-    <n-icon size="18" style="position:relative; top:5px">
+  <n-button
+    :type="market.live2d.isYapping ? 'success' : 'default'"
+    round
+    size="small"
+    :disabled="!market.live2d.canYap"
+    @click="market.live2d.isYapping = !market.live2d.isYapping"
+    class="yapButton"
+  >
+    <n-icon size="18" style="position:relative; top:1px; margin-right: 5px;">
       <Volume />
     </n-icon>
     Yap mode
-  </n-checkbox>
+  </n-button>
 </template>
 
 <script setup lang="ts">
@@ -12,6 +19,7 @@
 import { useMarket } from '@/stores/market'
 import { watch } from 'vue'
 import { Volume } from '@vicons/tabler'
+import { NIcon, NButton } from 'naive-ui'
 
 const market = useMarket()
 
@@ -25,5 +33,12 @@ watch(() => market.live2d.canYap, (value) => {
 </script>
 
 <style scoped lang="less">
-
+.yapButton {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px !important;
+}
 </style>

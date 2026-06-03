@@ -1,9 +1,9 @@
 <template>
-  <div id="player-container" :class="checkMobile() ? 'mobile' : 'computer'"></div>
+  <div id="player-container" :class="[checkMobile() ? 'mobile' : 'computer', { 'spine-hidden': isSpineHidden }]"></div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import { useMarket } from '@/stores/market'
 
 // @ts-ignore
@@ -13,10 +13,22 @@ import spine41 from '@/utils/spine/spine-player4.1'
 
 import { globalParams, messagesEnum } from '@/utils/enum/globalParams'
 import type { AttachmentInterface, AttachmentItemColorInterface } from '@/utils/interfaces/live2d'
+import { specialClickAnimations } from '@/utils/json/l2d'
 
 let canvas: HTMLCanvasElement | null = null
 let spineCanvas: any = null
 const market = useMarket()
+
+// Track spine visibility - hide until position is applied (reactive)
+const isSpineHidden = ref(true)
+
+// Track alternating animations per character
+const animationIndex: { [key: string]: number } = {}
+
+// Track default zoom per character to detect manual zoom adjustments
+let lastCharacterId = ''
+let hasUserZoomed = false
+let defaultZoomForCharacter = 0.5
 
 // Track both aim and cover spines
 let aimSpinePlayer: any = null
@@ -210,11 +222,16 @@ const playVoice = () => {
   const characterData = l2dData.find((a) => a.id === market.live2d.current_id)
   if (!characterData) return
   
-  // Check if this character variant should use a different voice folder
-  // Extract base character ID (e.g., 'c271_01' -> 'c271')
-  const baseCharacterId = characterData.id.split('_')[0]
-  // If base ID is in the list, use it; otherwise use the full character ID
-  const voiceFolderId = voiceGroupList.includes(baseCharacterId) ? baseCharacterId : characterData.id
+  // Check if this character is in a voice group override
+  let voiceFolderId = characterData.id
+  
+  // Search through overrides to find if current character is in a group
+  for (const [baseId, variants] of Object.entries(voiceGroupOverrides)) {
+    if (Array.isArray(variants) && variants.includes(characterData.id)) {
+      voiceFolderId = baseId
+      break
+    }
+  }
   
   // Get voices for current pose
   // Map UI poses to voice poses: 'fb', 'aim', 'temp' -> 'normal', 'cover' -> 'cover'
@@ -297,6 +314,11 @@ const playReloadSound = () => {
 }
 
 const playActionSound = () => {
+  // Favorite characters don't have action sounds
+  if (market.live2d.current_id.includes('favorite')) {
+    return
+  }
+  
   // Construct action sound path: /src/assets/voice/{characterId}/{characterId}_ca.mp3
   const actionSoundPath = `/src/assets/voice/${market.live2d.current_id}/${market.live2d.current_id}_ca.mp3`
   
@@ -619,7 +641,7 @@ const checkCharacterHasPose = (pose: 'fb' | 'aim' | 'cover' | 'temp'): boolean =
   // Characters that don't have aim pose
   const noAimCharacters = [
     'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', 'c010_01', // mast:outdated, rapi:outdated
+    'c350_old', // mast:outdated
     // All favorite characters only have fullbody pose
     'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
     'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
@@ -629,7 +651,7 @@ const checkCharacterHasPose = (pose: 'fb' | 'aim' | 'cover' | 'temp'): boolean =
   // Characters that don't have cover pose
   const noCoverCharacters = [
     'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', 'c010_01', // mast:outdated, rapi:outdated
+    'c350_old', // mast:outdated
     // All favorite characters only have fullbody pose
     'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
     'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
@@ -658,7 +680,7 @@ const verifyPoseFileExists = async (pose: 'aim' | 'cover'): Promise<boolean> => 
   }
 }
 
-import l2dData, { voiceMap, voiceGroupList, setCustomZoom } from '@/utils/json/l2d.js'
+import l2dData, { voiceMap, voiceGroupOverrides, setCustomZoom } from '@/utils/json/l2d.js'
 
 let currentVoice = null as null | HTMLAudioElement
 let currentReloadSound = null as null | HTMLAudioElement
@@ -681,6 +703,21 @@ const handleAction = () => {
   // For favorite characters, use expression_merged instead
   if (market.live2d.current_id.includes('favorite')) {
     actionAnimation = 'expression_merged'
+  }
+  // Check special click animations config - alternate between them
+  else if (specialClickAnimations[market.live2d.current_id]) {
+    const animations = specialClickAnimations[market.live2d.current_id]
+    // Initialize index if not exists
+    if (!animationIndex[market.live2d.current_id]) {
+      animationIndex[market.live2d.current_id] = 0
+    }
+    // Get current animation and move to next
+    const currentAnim = animations[animationIndex[market.live2d.current_id]]
+    animationIndex[market.live2d.current_id] = (animationIndex[market.live2d.current_id] + 1) % animations.length
+    
+    if (animationNames.includes(currentAnim)) {
+      actionAnimation = currentAnim
+    }
   }
   
   // Check if action animation exists, if not just play voice
@@ -712,12 +749,21 @@ const successfullyLoaded = () => {
   // market.message.getMessage().success(messagesEnum.MESSAGE_ASSET_LOADED, market.message.short_message)
 
   // Apply custom zoom after spine loads successfully
-  setTimeout(() => {
-    canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
-    if (canvas) {
-      transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
-    }
-  }, 50)
+  // Only apply if user hasn't manually zoomed
+  if (!hasUserZoomed) {
+    setTimeout(() => {
+      canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+      if (canvas) {
+        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
+        defaultZoomForCharacter = transformScale
+      }
+      // Show spine after position is applied
+      isSpineHidden.value = false
+    }, 50)
+  } else {
+    // Show immediately if user has custom zoom
+    isSpineHidden.value = false
+  }
 
   checkIfAssetCanYap()
 }
@@ -742,6 +788,15 @@ watch(
 watch(
   () => market.live2d.current_id,
   () => {
+    // Reset zoom flag when switching to a new character
+    if (lastCharacterId !== market.live2d.current_id) {
+      hasUserZoomed = false
+      lastCharacterId = market.live2d.current_id
+    }
+
+    // Reset spine visibility - hide until position is applied
+    isSpineHidden.value = true
+
     // Stop current BGM if playing
     if (currentBGM) {
       currentBGM.pause()
@@ -760,18 +815,30 @@ watch(
     loadSpineAfterWatcher()
     
     // Apply custom zoom after spine loads - wait longer for canvas to be ready
-    setTimeout(() => {
-      canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
-      if (canvas) {
-        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
-      }
-    }, 300)
+    // Only apply if user hasn't manually zoomed
+    if (!hasUserZoomed) {
+      setTimeout(() => {
+        canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+        if (canvas) {
+          transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
+          defaultZoomForCharacter = transformScale
+        }
+        // Show spine after position is applied
+        isSpineHidden.value = false
+      }, 300)
+    } else {
+      // Show immediately if user has custom zoom
+      isSpineHidden.value = false
+    }
   }
 )
 
 watch(
   () => market.live2d.current_pose,
   async () => {
+    // Reset zoom flag when switching pose (allow custom zoom for new pose)
+    hasUserZoomed = false
+
     // Stop any playing sound effects when switching poses
     stopAllSoundEffects()
     
@@ -801,7 +868,26 @@ watch(
 watch(
   () => market.live2d.resetPlacement,
   () => {
-    applyDefaultStyle2Canvas()
+    hasUserZoomed = false
+    
+    // Reset transformScale to base value
+    transformScale = market.live2d.HQassets ? 0.18 : 0.5
+    
+    applyDefaultStyle2CanvasImmediate()
+    
+    // Hide spine temporarily while position is being reset
+    isSpineHidden.value = true
+    
+    // Reapply custom zoom after reset immediately
+    setTimeout(() => {
+      canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+      if (canvas) {
+        transformScale = setCustomZoom(market.live2d.current_id, canvas, transformScale, market.live2d.current_pose)
+        defaultZoomForCharacter = transformScale
+      }
+      // Show spine after position is applied
+      isSpineHidden.value = false
+    }, 50)
   }
 )
 
@@ -1004,6 +1090,28 @@ const applyDefaultStyle2Canvas = () => {
   }, 50)
 }
 
+const applyDefaultStyle2CanvasImmediate = () => {
+  canvas = document.querySelector('.spine-player-canvas') as HTMLCanvasElement
+
+  if (!canvas) return
+
+  canvas.width = canvas.height
+
+  if (checkMobile()) {
+    setCanvasStyleMobile()
+  } else {
+    canvas.style.height = market.live2d.HQassets ? '438vh' : '168vh'
+    canvas.style.marginTop = market.live2d.HQassets ? 'calc(-171vh)' : 'calc(-30vh)'
+    canvas.style.transform = market.live2d.HQassets ? 'scale(0.294)' : 'scale(0.7)'
+    canvas.style.position = 'absolute'
+    canvas.style.left = '0px'
+    canvas.style.top = '0px'
+    transformScale = market.live2d.HQassets ? 0.18 : 0.5
+    market.globalParams.showMobileHeader()
+    centerForPC()
+  }
+}
+
 const setCanvasStyleMobile = () => {
   if (!canvas) return
 
@@ -1090,20 +1198,36 @@ let transformScale = 0.5
 
 document.addEventListener('wheel', (e) => {
   if (filterDomEvents(e)) {
+    // Mark that user has manually zoomed
+    hasUserZoomed = true
+
+    if (!canvas) return
+
+    // Get the actual current scale from the canvas transform
+    const currentTransform = canvas.style.transform
+    const scaleMatch = currentTransform.match(/scale\(([\d.]+)\)/)
+    const currentScale = scaleMatch ? parseFloat(scaleMatch[1]) : transformScale
+
+    let newScale = currentScale
+
     switch (e.deltaY > 0) {
       case true:
-        transformScale -= 0.02
-        transformScale < 0.01 && transformScale > -0.01 ? (transformScale = -0.02) : ''
+        newScale -= 0.02
         break
       case false:
-        transformScale += 0.02
-        transformScale < 0.01 && transformScale > -0.01 ? (transformScale = 0.02) : ''
+        newScale += 0.02
         break
       default:
         break
     }
 
-    canvas && (canvas.style.transform = 'scale(' + transformScale + ')')
+    // Clamp the transform scale to prevent going below minimum or into negative values
+    const MIN_SCALE = 0.05
+    const MAX_SCALE = 5.0
+    newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale))
+
+    transformScale = newScale
+    canvas.style.transform = 'scale(' + newScale + ')'
   }
 })
 
@@ -1226,6 +1350,10 @@ const triggerPreview1 = () => {
 #player-container {
   //height: calc(100vh - 100px);
   overflow: hidden;
+  
+  &.spine-hidden {
+    visibility: hidden;
+  }
 }
 .mobile {
   height: -webkit-fill-available;
