@@ -16,5 +16,8 @@ OR just run the bat file in folder "_run.bat", first time it might close automat
 
 _______________________________________________________
 im missing these nikke might have no sound effects
-1. Helm: Aquamarine
-2. Neon: Blue Ocean
+1. Poli@Favorite
+2. Miranda@Favorite
+3. Helm: Aquamarine
+4. Milk@Favorite
+5. Neon: Blue Ocean
