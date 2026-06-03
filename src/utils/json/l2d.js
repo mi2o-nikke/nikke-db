@@ -765,13 +765,18 @@ const specialClickAnimations = {
 }
 
 const customZoomSettings = {
-  'c017': { zoom: 0.23, offsetX: 0, offsetY: -50 },
-  'c017_01': { zoom: 0.26, offsetX: 0, offsetY: -80 },
-  'c018': { zoom: 0.23, offsetX: 0 },
+  'c017': { zoom: 0.23, offsetY: -50 },
+  'c017_01': { zoom: 0.26, offsetY: -80 },
+  'c018': { zoom: 0.23 },
+  'c030': { offsetX: 80 },
+  'c092': { zoom: 0.23, offsetY: -50 },
+  'c094_01': { zoom: 0.22, offsetX: -150, offsetY: -40 },
   'c140': { offsetX: 80 },
   'c140_01': { offsetX: 80 },
   'c140_02': { offsetX: 80 },
-  'c352_01': { zoom: 0.3, offsetX: 0, offsetY: -180 },
+  'c272_01': { zoom: 0.28, offsetY: 50 },
+  'c352_01': { zoom: 0.3, offsetY: -180 },
+  'c352_02': { zoom: 0.24, offsetX: 0, offsetY: -50 },
   'favorite_c030': { zoom: 0.24, offsetX: 60 },
   'favorite_c032': { zoom: 0.3, offsetX: 60 },
   'favorite_c112': { zoom: 0.28, offsetX: 60 },
