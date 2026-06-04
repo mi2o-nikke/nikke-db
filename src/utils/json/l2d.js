@@ -1,4 +1,5 @@
 const l2dData = [
+
   { 'group': '777', 'name': 'Blanc', 'id': 'c270' },
   { 'group': '777', 'name': 'Blanc White Rabbit', 'id': 'c270_01' },
   { 'group': '777', 'name': 'Blanc No.77 Batter', 'id': 'c270_02' },
@@ -760,6 +761,9 @@ const l2dData = [
 
 const specialClickAnimations = {
   'c011': ['expression_0'],
+  'c990': ['sad'],
+  'c992': ['angry'],
+  'c994': ['angry_02'],
   'c412_01': ['expression_0', 'expression_1'],
 }
 
@@ -776,6 +780,7 @@ const customZoomSettings = {
   'c272_01': { zoom: 0.28, offsetY: 50 },
   'c352_01': { zoom: 0.3, offsetY: -180 },
   'c352_02': { zoom: 0.24, offsetY: -50 },
+  'c450_02': { zoom: 0.25, offsetY: -70 },
   'c850_03': { zoom: 0.25 },
   'favorite_c030': { zoom: 0.24, offsetX: 60 },
   'favorite_c032': { zoom: 0.3, offsetX: 60 },
@@ -801,19 +806,24 @@ const voiceGroupOverrides = {
   'c141': ['c141_01'],
   'c142': ['c142_01'],
   'c271': ['c271_01', 'c271_02'],
-  'c350': ['c350_01'],
+  'c350': ['c350_01', 'c350_old'],
   'c352': ['c352_01'],
   'c412': ['c412_01'],
-  'c851': ['c851_01'],
+  'c450': ['c450_01'],
+  'c451': ['c451_01', 'c451_02'],
+  'c851': ['c851_01'], 
 }
 
 export const charactersWithoutAimAndCover = [
   'c350_old', 
   'c853',
-  'c992', 'c9019', 'c990', 'c989', 'c994', 'c998',
-  'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
-  'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
-  'favorite_c550', 'favorite_c072', 'favorite_c192'
+  'c989', 'c990', 'c992', 'c994', 'c998',
+  'c9019', 
+  'favorite_c030', 'favorite_c032', 'favorite_c072', 
+  'favorite_c100', 'favorite_c101', 'favorite_c112', 'favorite_c141', 'favorite_c142', 'favorite_c150', 'favorite_c192',
+  'favorite_c210', 
+  'favorite_c352',
+  'favorite_c550',
 ]
 
 const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {

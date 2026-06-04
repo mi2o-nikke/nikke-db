@@ -70,17 +70,27 @@ const l2dData = [
   { 'group': 'Cooking Oil', 'name': 'Bready Frosty Bite', 'id': 'c520_01' },
   { 'group': 'Cooking Oil', 'name': 'Crust', 'id': 'c521' },
 
-
-
-
-
-
-
-
-
+  { 'group': 'Counters', 'name': 'Rapi', 'id': 'c010' },
+  { 'group': 'Counters', 'name': 'Rapi: Outdated', 'id': 'c010_01' },
+  { 'group': 'Counters', 'name': 'Rapi White Promise', 'id': 'c010_02' },
+  { 'group': 'Counters', 'name': 'Rapi Classic Vacation', 'id': 'c010_03' },
+  { 'group': 'Counters', 'name': 'Neon', 'id': 'c011' },
+  { 'group': 'Counters', 'name': 'Neon Bling Bullet', 'id': 'c011_01' },
+  { 'group': 'Counters', 'name': 'Anis', 'id': 'c012' },
+  { 'group': 'Counters', 'name': 'Neon: Blue Ocean', 'id': 'c014' },
+  { 'group': 'Counters', 'name': 'Anis: Sparkling Summer', 'id': 'c015' },
+  { 'group': 'Counters', 'name': 'Rapi: Red Hood', 'id': 'c016' },
+  { 'group': 'Counters', 'name': 'Rapi: Red Hood Red Flavor', 'id': 'c016_01' },
+  { 'group': 'Counters', 'name': 'Rapi: Red Hood Cherished Red', 'id': 'c016_02' },
+  { 'group': 'Counters', 'name': 'Rapi: Red Hood Shining Light', 'id': 'c016_03' },
+  { 'group': 'Counters', 'name': 'Anis: Star', 'id': 'c017' },
+  { 'group': 'Counters', 'name': 'Anis: Starlight', 'id': 'c017_01' },
+  { 'group': 'Counters', 'name': 'Anis: Star T.T.STAR', 'id': 'c017_02' },
+  { 'group': 'Counters', 'name': 'Neon: Vision Eye', 'id': 'c018' },
+  { 'group': 'Counters', 'name': 'Rapi: Red', 'id': 'c989' },
+  { 'group': 'Counters', 'name': 'Rapi: Minor', 'id': 'c990' },
+  { 'group': 'Counters', 'name': 'Rapi: Child', 'id': 'c992' },
+  { 'group': 'Counters', 'name': 'Rapi: Origin', 'id': 'c994' },
+  { 'group': 'Counters', 'name': 'Neon: Child', 'id': 'c9019' },
 
   
-
-
-
-]
