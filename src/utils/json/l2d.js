@@ -761,10 +761,12 @@ const l2dData = [
 
 const specialClickAnimations = {
   'c011': ['expression_0'],
+  'c989': ['special'],
   'c990': ['sad'],
   'c992': ['angry'],
   'c994': ['angry_02'],
   'c412_01': ['expression_0', 'expression_1'],
+  'c9018': ['delight'],
 }
 
 const customZoomSettings = {

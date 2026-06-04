@@ -718,6 +718,8 @@ const handleAction = () => {
     idleAnimation = 'idle_merged'
   } else if (['smol_anis', 'smol_prika', 'smol_mint'].includes(market.live2d.current_id)) {
     idleAnimation = 'pose_idle'
+  } else if (market.live2d.current_id === 'c994') {
+    idleAnimation = 'idle_02'
   }
 
   // back to idle after action finish (only if idle animation exists)
