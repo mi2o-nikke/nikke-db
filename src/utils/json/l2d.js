@@ -767,6 +767,7 @@ const specialClickAnimations = {
   'c994': ['angry_02'],
   'c412_01': ['expression_0', 'expression_1'],
   'c9018': ['delight'],
+  'c9019': ['delight'],
 }
 
 const customZoomSettings = {
