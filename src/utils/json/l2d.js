@@ -1,4 +1,3 @@
-
 const l2dData = [
   { 'group': '777', 'name': 'Blanc', 'id': 'c270' },
   { 'group': '777', 'name': 'Blanc White Rabbit', 'id': 'c270_01' },
@@ -449,7 +448,6 @@ const l2dData = [
   { 'group': '_Npc', 'name': 'Lumi', 'id': 'c970' },
   { 'group': '_Npc', 'name': 'Nadia', 'id': 'c983' },
   { 'group': '_Npc', 'name': 'D.E.E.P', 'id': 'c991' },
-  { 'group': '_Npc', 'name': 'Hermin', 'id': 'c998' },
   { 'group': '_Npc', 'name': 'Spirit Pinne', 'id': 'c9001' },
   { 'group': '_Npc', 'name': 'Nora', 'id': 'c9002' },
   { 'group': '_Npc', 'name': 'Mrs. Miss', 'id': 'c9003' },
@@ -558,6 +556,7 @@ const l2dData = [
   { 'group': '__Collab Airborne Squad', 'name': 'Raven Midsummer Alice', 'id': 'c851_02' },
   { 'group': '__Collab Airborne Squad', 'name': 'Lily', 'id': 'c852' },
   { 'group': '__Collab Airborne Squad', 'name': 'Adam', 'id': 'c853' },
+  { 'group': '__Collab Airborne Squad', 'name': 'Hermin', 'id': 'c998' },
 
   { 'group': '__Collab B.S.T.', 'name': 'Ada', 'id': 'c840' },
   { 'group': '__Collab B.S.T.', 'name': 'Ada Seperate Ways', 'id': 'c840_01' },
@@ -776,7 +775,8 @@ const customZoomSettings = {
   'c140_02': { offsetX: 80 },
   'c272_01': { zoom: 0.28, offsetY: 50 },
   'c352_01': { zoom: 0.3, offsetY: -180 },
-  'c352_02': { zoom: 0.24, offsetX: 0, offsetY: -50 },
+  'c352_02': { zoom: 0.24, offsetY: -50 },
+  'c850_03': { zoom: 0.25 },
   'favorite_c030': { zoom: 0.24, offsetX: 60 },
   'favorite_c032': { zoom: 0.3, offsetX: 60 },
   'favorite_c112': { zoom: 0.28, offsetX: 60 },
@@ -804,7 +804,17 @@ const voiceGroupOverrides = {
   'c350': ['c350_01'],
   'c352': ['c352_01'],
   'c412': ['c412_01'],
+  'c851': ['c851_01'],
 }
+
+export const charactersWithoutAimAndCover = [
+  'c350_old', 
+  'c853',
+  'c992', 'c9019', 'c990', 'c989', 'c994', 'c998',
+  'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
+  'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
+  'favorite_c550', 'favorite_c072', 'favorite_c192'
+]
 
 const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
   const zoomKey = currentPose === 'fb' ? characterId : `${characterId}_${currentPose}`

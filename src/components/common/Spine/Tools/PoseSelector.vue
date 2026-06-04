@@ -24,6 +24,7 @@ import { AccessibilityTwotone } from '@vicons/material'
 import { h, ref, watch } from 'vue'
 import ManageProtection from '@vicons/carbon/ManageProtection'
 import { globalParams } from '@/utils/enum/globalParams'
+import { charactersWithoutAimAndCover } from '@/utils/json/l2d.js'
 
 const market = useMarket()
 
@@ -76,29 +77,11 @@ const poses = [
 const checkCharacterHasPose = (pose: 'aim' | 'cover'): boolean => {
   const characterId = market.live2d.current_id
   
-  const noAimCharacters = [
-    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', // mast:outdated
-    // All favorite characters only have fullbody pose
-    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
-    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
-    'favorite_c550', 'favorite_c072', 'favorite_c192'
-  ]
-  
-  const noCoverCharacters = [
-    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', // mast:outdated
-    // All favorite characters only have fullbody pose
-    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
-    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
-    'favorite_c550', 'favorite_c072', 'favorite_c192'
-  ]
-  
-  if (pose === 'aim' && noAimCharacters.includes(characterId)) {
+  if (pose === 'aim' && charactersWithoutAimAndCover.includes(characterId)) {
     return false
   }
   
-  if (pose === 'cover' && noCoverCharacters.includes(characterId)) {
+  if (pose === 'cover' && charactersWithoutAimAndCover.includes(characterId)) {
     return false
   }
   

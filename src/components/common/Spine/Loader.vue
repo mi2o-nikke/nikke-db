@@ -13,7 +13,7 @@ import spine41 from '@/utils/spine/spine-player4.1'
 
 import { globalParams, messagesEnum } from '@/utils/enum/globalParams'
 import type { AttachmentInterface, AttachmentItemColorInterface } from '@/utils/interfaces/live2d'
-import { specialClickAnimations } from '@/utils/json/l2d'
+import { specialClickAnimations, charactersWithoutAimAndCover } from '@/utils/json/l2d'
 
 let canvas: HTMLCanvasElement | null = null
 let spineCanvas: any = null
@@ -639,30 +639,12 @@ const getDefaultAnimation = (availableAnimations?: Array<{ name: string }>) => {
 
 const checkCharacterHasPose = (pose: 'fb' | 'aim' | 'cover' | 'temp'): boolean => {
   // Characters that don't have aim pose
-  const noAimCharacters = [
-    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', // mast:outdated
-    // All favorite characters only have fullbody pose
-    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
-    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
-    'favorite_c550', 'favorite_c072', 'favorite_c192'
-  ]
-  
-  // Characters that don't have cover pose
-  const noCoverCharacters = [
-    'c992', 'c9019', 'c990', 'c989', 'c994', // rapi:child, neon:child, rapi:minor, rapi:red, rapi:origin
-    'c350_old', // mast:outdated
-    // All favorite characters only have fullbody pose
-    'favorite_c030', 'favorite_c032', 'favorite_c112', 'favorite_c141', 'favorite_c142',
-    'favorite_c150', 'favorite_c100', 'favorite_c101', 'favorite_c210', 'favorite_c352',
-    'favorite_c550', 'favorite_c072', 'favorite_c192'
-  ]
-  
-  if (pose === 'aim' && noAimCharacters.includes(market.live2d.current_id)) {
+  if (pose === 'aim' && charactersWithoutAimAndCover.includes(market.live2d.current_id)) {
     return false
   }
   
-  if (pose === 'cover' && noCoverCharacters.includes(market.live2d.current_id)) {
+  // Characters that don't have cover pose
+  if (pose === 'cover' && charactersWithoutAimAndCover.includes(market.live2d.current_id)) {
     return false
   }
   
