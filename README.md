@@ -1,3 +1,5 @@
+This is a fan-made project GODDESS OF VICTORY: NIKKE and all related assets are owned by SHIFT UP Corp. and Level Infinite.
+
 Credit to Koshirei
 https://github.com/Nikke-db/Nikke-db.github.io
 

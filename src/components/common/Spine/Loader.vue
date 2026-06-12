@@ -624,6 +624,7 @@ const getDefaultAnimation = (availableAnimations?: Array<{ name: string }>) => {
 
   // mass manufactured rapi
   if (market.live2d.current_id === 'c994') return 'idle_02'
+  if (market.live2d.current_id === 'c996') return 'idle_02'
 
   if (market.live2d.current_id.includes('favorite')) return 'idle_merged'
 
@@ -719,6 +720,8 @@ const handleAction = () => {
   } else if (['smol_anis', 'smol_prika', 'smol_mint'].includes(market.live2d.current_id)) {
     idleAnimation = 'pose_idle'
   } else if (market.live2d.current_id === 'c994') {
+    idleAnimation = 'idle_02'
+  } else if (market.live2d.current_id === 'c996') {
     idleAnimation = 'idle_02'
   }
 

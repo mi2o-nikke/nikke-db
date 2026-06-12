@@ -1,4 +1,4 @@
-const l2dData = [
+
   { 'group': '777', 'name': 'Blanc', 'id': 'c270' },
   { 'group': '777', 'name': 'Blanc White Rabbit', 'id': 'c270_01' },
   { 'group': '777', 'name': 'Blanc No.77 Batter', 'id': 'c270_02' },
@@ -93,4 +93,33 @@ const l2dData = [
   { 'group': 'Counters', 'name': 'Rapi: Origin', 'id': 'c994' },
   { 'group': 'Counters', 'name': 'Neon: Child', 'id': 'c9019' },
 
-  
+  { 'group': 'Dazzling Pear', 'name': 'Naga', 'id': 'c450' },
+  { 'group': 'Dazzling Pear', 'name': 'Naga Elegant Date', 'id': 'c450_01' },
+  { 'group': 'Dazzling Pear', 'name': 'Naga Last Girlhood', 'id': 'c450_02' },
+  { 'group': 'Dazzling Pear', 'name': 'Tia', 'id': 'c451' },
+  { 'group': 'Dazzling Pear', 'name': 'Tia Lovely Date', 'id': 'c451_01' },
+  { 'group': 'Dazzling Pear', 'name': 'Tia Sweet Chef', 'id': 'c451_02' },
+
+  { 'group': 'Electric Shock', 'name': 'Elegg', 'id': 'c500' },
+  { 'group': 'Electric Shock', 'name': 'Trony', 'id': 'c501' },
+  { 'group': 'Electric Shock', 'name': 'Trony Sweet Step', 'id': 'c501_01' },
+  { 'group': 'Electric Shock', 'name': 'Elegg: Boom and Shock', 'id': 'c502' },
+
+  { 'group': 'Exotic', 'name': 'Crow', 'id': 'c110' },
+  { 'group': 'Exotic', 'name': 'Jackal', 'id': 'c111' },
+  { 'group': 'Exotic', 'name': 'Jackal Class Troublemaker', 'id': 'c111_01' },
+  { 'group': 'Exotic', 'name': 'Viper', 'id': 'c112' },
+  { 'group': 'Exotic', 'name': 'Viper Toxic Rabbit', 'id': 'c112_01' },
+  { 'group': 'Exotic', 'name': 'Viper Shine of Love', 'id': 'c112_02' },
+  { 'group': 'Exotic', 'name': 'Viper Punky Street', 'id': 'c112_03' },
+  { 'group': 'Exotic', 'name': 'E.H.', 'id': 'c113' },
+  { 'group': 'Exotic', 'name': 'E.H.: Origin', 'id': 'c940' },
+  { 'group': 'Exotic', 'name': 'Viper@Favorite', 'id': 'favorite_c112' },
+
+  { 'group': 'Extrinsic', 'name': 'Guillotine', 'id': 'c180' },
+  { 'group': 'Extrinsic', 'name': 'Guillotine Dark Tracer', 'id': 'c180_01' },
+  { 'group': 'Extrinsic', 'name': 'Maiden', 'id': 'c181' },
+  { 'group': 'Extrinsic', 'name': 'Maiden Covert Nurse', 'id': 'c181_01' },
+  { 'group': 'Extrinsic', 'name': 'Maiden Under the Sun', 'id': 'c181_02' },
+  { 'group': 'Extrinsic', 'name': 'Guillotine Winter Slayer', 'id': 'c182' },
+  { 'group': 'Extrinsic', 'name': 'Maiden Ice Rose', 'id': 'c183' },
