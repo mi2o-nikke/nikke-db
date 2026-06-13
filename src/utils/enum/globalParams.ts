@@ -1,7 +1,7 @@
 /* eslint-disable */
 enum globalParams {
   GITHUB = 'https://github.com/Nikke-db/nikke-db-vue',
-  LOCALHOST = 'http://localhost:5173/src/assets/',
+  LOCALHOST = '/assets/',
   NIKKE_DB = LOCALHOST,
   // NIKKE_DB = 'https://nikke-db-legacy.pages.dev/',
   // NIKKE_DB = LOCALHOST,
