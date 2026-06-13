@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { onMounted, onBeforeMount, onUnmounted } from 'vue'
 import { useMarket } from '@/stores/market'
-import bgi from '@/assets/index_bg2.webp'
+// import bgi from '@/assets/index_bg2.webp'
 import updates from '@/utils/json/updateLog.json'
 // import indexalt from '@/assets/index-alt.png'
 
@@ -53,7 +53,7 @@ onMounted(() => {
     market.load.endLoad();
     (document.querySelector('.n-back-top') as HTMLElement).click()
   }, 10)
-  document.body.style.backgroundImage = 'url(' + bgi + ')'
+  // document.body.style.backgroundImage = 'url(' + bgi + ')'
 })
 
 onUnmounted(() => {

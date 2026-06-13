@@ -6,12 +6,12 @@
     <n-divider/>
 
     <n-alert type="info">High Quality Asset</n-alert><br/>
-    <n-image :src="hq" :width="'100%'"/>
+    <!-- <n-image :src="hq" :width="'100%'"/> -->
 
     <n-divider/>
 
     <n-alert type="info">Low Quality Asset</n-alert><br/>
-    <n-image :src="lq" :width="'100%'"/>
+    <!-- <n-image :src="lq" :width="'100%'"/> -->
 
     <n-divider/>
 
@@ -25,14 +25,14 @@
     <n-divider/>
 
     <n-alert type="info">4k monitor with a cropped asset in "High Quality Mode". The issue is fixed in "Low Quality Mode"</n-alert><br/>
-    <n-image :src="fourk" :width="'100%'"/>
+    <!-- <n-image :src="fourk" :width="'100%'"/> -->
   </n-card>
 </template>
 
 <script lang="ts" setup>
-import hq from '@/assets/notice_imgs/HQ.png'
-import lq from '@/assets/notice_imgs/LQ.png'
-import fourk from '@/assets/notice_imgs/fourk.png'
+// import hq from '@/assets/notice_imgs/HQ.png'
+// import lq from '@/assets/notice_imgs/LQ.png'
+// import fourk from '@/assets/notice_imgs/fourk.png'
 
 </script>
 

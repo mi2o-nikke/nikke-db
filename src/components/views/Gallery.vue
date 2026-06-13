@@ -75,7 +75,6 @@
           <div v-if="carouselData.type === 'img'">
             <n-image
               :src="globalParams.GALLERY + carouselData.path + data.name + (data.name.includes('.') ? '' : '.png')"
-              :fallback-src="maids"
               style="height:20vw; max-height: 512px;"
             />
             <n-h3 prefix="bar" type="info">
@@ -107,7 +106,6 @@
           <div style="text-align:center; width:100%;">
             <img
             :src="globalParams.GALLERY + carouselData.path + data.name + (data.name.includes('.') ? '' : '.png')"
-            :fallback-src="maids"
             style="max-width: 95%; max-height:80vh; object-fit: cover;"
             object-fit='contain'
             loading="lazy"
@@ -140,7 +138,7 @@
 import { useMarket } from '@/stores/market'
 import type { galleryInterface } from '@/utils/interfaces/gallery'
 import { type Ref, ref } from 'vue'
-import maids from '@/assets/maids.png'
+// import maids from '@/assets/maids.png'
 import { messagesEnum, globalParams } from '@/utils/enum/globalParams'
 import ArrowTemplate from '@/components/common/Gallery/ArrowTemplate.vue'
 import ButtonTemplate from '@/components/common/Gallery/ButtonTemplate.vue'

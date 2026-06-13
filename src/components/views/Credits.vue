@@ -2,7 +2,7 @@
   <n-card class="center first" :class="checkMobile()">
     <n-p :class="checkMobile()">I'd like to dedicate this page to anyone who contributed one way or another to the website during it's entire lifespan. I am mainly alone in this project but any help I receive brings me great joy.</n-p><br />
     <div class="imgDiv">
-      <img :src="maids" />
+      <!-- <img :src="maids" /> -->
     </div>
   </n-card>
 
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import maids from '@/assets/maids.png'
+// import maids from '@/assets/maids.png'
 import { type help } from '@/utils/interfaces/contributor'
 import CreditTemplate from '@/components/common/Credits/Template.vue'
 import { useMarket } from '@/stores/market'

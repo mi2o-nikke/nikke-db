@@ -39,7 +39,7 @@
     So let's filter by these keywords and click on the "Select results" button. <br/>
 
     <div class="center-image">
-      <n-image :src="layerEditor1" width="100%"/> <br/>
+      <!-- <n-image :src="layerEditor1" width="100%"/> <br/> -->
     </div>
 
     Clearing the search box will <b> NOT </b> remove the check box on ANY attachment. <br/> <br/>
@@ -48,7 +48,7 @@
     Always double check what the website is finding and selecting : Have you realised that two attachments called "boob_" have been found ? I don't know about you but I sure don't want them to disappear, so let's manually uncheck them.<br/>
 
     <div class="center-image">
-      <n-image :src="layerEditor2" width="100%"/> <br/><br/>
+      <!-- <n-image :src="layerEditor2" width="100%"/> <br/><br/> -->
     </div>
 
     Let's also manually check "object3" as this references the last orb. <br/>
@@ -58,13 +58,13 @@
     As you can guess, we want them gone, so the new value for the channel must be 0, then apply the modifications.<br/>
 
     <div class="center-image">
-      <n-image :src="layerEditor3" width="100%"/> <br/><br/>
+      <!-- <n-image :src="layerEditor3" width="100%"/> <br/><br/> -->
     </div>
 
     Good ! The orbs are gone ! But as you can see, the lighting they emit is still there; litteraly no problem, let's remove them too.<br/>
 
     <div class="center-image">
-      <n-image :src="layerEditor4" width="100%"/> <br/><br/>
+      <!-- <n-image :src="layerEditor4" width="100%"/> <br/><br/> -->
     </div>
 
     And you are done ! you can now close the tool and use every other features of Nikke-DB : adding a background, listen to the girl yap, take a screenshot, without the attachments that have been hidden.
@@ -79,7 +79,7 @@
     For my example I used the values (190, 190, 100) for RGB to have the result bellow, do not forget to put 255 for the alpha channel or else she'll have a hole instead of the honkers. <br/>
 
     <div class="center-image">
-      <n-image :src="layerEditor5" width="100%"/> <br/><br/>
+      <!-- <n-image :src="layerEditor5" width="100%"/> <br/><br/> -->
     </div>
 
     Getting the color you want will be extremely hard as you are changing the intensity of the 3 colors instead of giving them a brute value, some colors might just be impossible to produce too (white/grey being an easy example). So have fun with what's possible
@@ -92,11 +92,11 @@
 </template>
 
 <script lang="ts" setup>
-import layerEditor1 from '@/assets/notice_imgs/layerEditor1.png'
-import layerEditor2 from '@/assets/notice_imgs/layerEditor2.png'
-import layerEditor3 from '@/assets/notice_imgs/layerEditor3.png'
-import layerEditor4 from '@/assets/notice_imgs/layerEditor4.png'
-import layerEditor5 from '@/assets/notice_imgs/layerEditor5.png'
+// import layerEditor1 from '@/assets/notice_imgs/layerEditor1.png'
+// import layerEditor2 from '@/assets/notice_imgs/layerEditor2.png'
+// import layerEditor3 from '@/assets/notice_imgs/layerEditor3.png'
+// import layerEditor4 from '@/assets/notice_imgs/layerEditor4.png'
+// import layerEditor5 from '@/assets/notice_imgs/layerEditor5.png'
 </script>
 
 <style scoped lang="less">
