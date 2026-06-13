@@ -883,6 +883,27 @@ const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
 // We'll generate URLs dynamically for each character based on the known structure
 const voiceMap = {}
 
+// Helper function to generate voice URLs dynamically
+// URLs are generated for all possible lines (1-20) and the browser/cache will handle which ones exist
+const generateVoiceUrls = (voiceFolderId) => {
+  const normal = []
+  const cover = []
+  
+  // Normal voices: Generate URLs for lines 1-20
+  // The actual files may be less, the error handler will skip missing ones
+  for (let i = 1; i <= 20; i++) {
+    normal.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
+  }
+  
+  // Cover/aim pose voices: Generate URLs for lines 1-20
+  // The actual files may be less, the error handler will skip missing ones
+  for (let i = 1; i <= 20; i++) {
+    cover.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
+  }
+  
+  return { normal, cover }
+}
+
 // Build voiceMap from l2dData with dynamic URL construction
 l2dData.forEach((character) => {
   const characterId = character.id
@@ -896,19 +917,11 @@ l2dData.forEach((character) => {
     }
   }
   
+  // Generate voice URLs for this character
+  const voices = generateVoiceUrls(voiceFolderId)
   voiceMap[characterId] = {
-    normal: [],
-    cover: []
-  }
-  
-  // Normal voice lines (1-6)
-  for (let i = 1; i <= 6; i++) {
-    voiceMap[characterId].normal.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
-  }
-  
-  // Cover/aim pose voice lines (7-9)
-  for (let i = 7; i <= 9; i++) {
-    voiceMap[characterId].cover.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
+    normal: voices.normal,
+    cover: voices.cover
   }
 })
 

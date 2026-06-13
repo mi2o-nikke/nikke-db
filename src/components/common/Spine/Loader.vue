@@ -220,41 +220,41 @@ const swapBackToCoverSpine = async () => {
   }
 }
 
-const playVoice = () => {
-  const characterData = l2dData.find((a) => a.id === market.live2d.current_id)
-  if (!characterData) return
+const playVoiceWithRetry = (characterId: string, pose: string, attemptCount = 0): boolean => {
+  const MAX_VOICE_RECURSION = 25 // Max recursion depth
   
-  // Check if this character is in a voice group override
-  let voiceFolderId = characterData.id
-  
-  // Search through overrides to find if current character is in a group
+  if (attemptCount > MAX_VOICE_RECURSION) {
+    console.warn(`Max voice recursion depth reached for ${characterId}`)
+    return false
+  }
+
+  // Get voice folder ID (handles group overrides)
+  let voiceFolderId = characterId
   for (const [baseId, variants] of Object.entries(voiceGroupOverrides)) {
-    if (Array.isArray(variants) && variants.includes(characterData.id)) {
+    if (Array.isArray(variants) && variants.includes(characterId)) {
       voiceFolderId = baseId
       break
     }
   }
+
+  const voices = voiceMap[voiceFolderId]?.[pose]
   
-  // Get voices for current pose
-  // Map UI poses to voice poses: 'fb', 'aim', 'temp' -> 'normal', 'cover' -> 'cover'
-  let currentPose = 'normal'
-  if (market.live2d.current_pose === 'cover') {
-    currentPose = 'cover'
-  }
-  const voices = voiceMap[voiceFolderId]?.[currentPose]
+  if (!voices || voices.length === 0) return false
   
-  if (!voices || voices.length === 0) return
-  
-  // Create a unique key for this character and pose combination
-  const voiceKey = `${voiceFolderId}_${currentPose}`
-  
-  // Get current index or initialize to 0
+  const voiceKey = `${voiceFolderId}_${pose}`
   let currentIndex = voiceIndexMap.get(voiceKey) ?? 0
-  
-  // Get the voice at current index
   const voice = voices[currentIndex]
   
-  // Increment index for next time, loop back to 0 when reaching end
+  // Check cache first - skip known missing voices
+  if (voiceExistsCache.has(voice) && voiceExistsCache.get(voice) === false) {
+    console.debug(`Skipping known missing voice: ${voice}`)
+    // Move to next voice and try again
+    currentIndex = (currentIndex + 1) % voices.length
+    voiceIndexMap.set(voiceKey, currentIndex)
+    return playVoiceWithRetry(characterId, pose, attemptCount + 1)
+  }
+  
+  // Increment index for next time
   currentIndex = (currentIndex + 1) % voices.length
   voiceIndexMap.set(voiceKey, currentIndex)
   
@@ -263,11 +263,41 @@ const playVoice = () => {
     currentVoice.currentTime = 0
   }
 
-  // play new voice
+  // Try to play this voice
   if (voice) {
     currentVoice = new Audio(voice)
-    currentVoice.play()
+    currentVoice.addEventListener('error', () => {
+      voiceExistsCache.set(voice, false)
+      console.debug(`Voice file not found: ${voice}`)
+      // On error, try the next voice
+      playVoiceWithRetry(characterId, pose, attemptCount + 1)
+    }, { once: true })
+    
+    currentVoice.addEventListener('canplay', () => {
+      voiceExistsCache.set(voice, true)
+    }, { once: true })
+    
+    currentVoice.play().catch((err) => {
+      console.debug(`Failed to play voice: ${err.message}`)
+    })
+    
+    return true
   }
+  
+  return false
+}
+
+const playVoice = () => {
+  const characterData = l2dData.find((a) => a.id === market.live2d.current_id)
+  if (!characterData) return
+  
+  let currentPose = 'normal'
+  if (market.live2d.current_pose === 'cover') {
+    currentPose = 'cover'
+  }
+  
+  // Try to play voice with automatic retry on missing files
+  playVoiceWithRetry(market.live2d.current_id, currentPose)
   
   // Stop any existing sound effects first
   stopAllSoundEffects()
@@ -674,6 +704,9 @@ let isAimHolding = false
 
 // Track voice index for sequential playback
 const voiceIndexMap = new Map<string, number>()
+
+// Cache to track which voice files actually exist (avoid repeated 404 attempts)
+const voiceExistsCache = new Map<string, boolean>()
 
 const handleAction = () => {
 
