@@ -3,7 +3,7 @@
     <n-card size="small" :bordered="false">
       <n-input type="text" placeholder="Name or Group" v-model:value="name_filter" :clearable="true"></n-input>
       <button @click="toogleGroupExpand()" class="icon-btn">
-        <img src="@/assets/images/sprite/si_c907_00_s.png" alt="Toggle Expand" />
+        <img src="/assets/images/sprite/si_c907_00_s.png" alt="Toggle Expand" />
       </button>
     </n-card>
     <n-scrollbar>

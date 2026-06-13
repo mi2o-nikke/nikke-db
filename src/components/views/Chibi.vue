@@ -25,7 +25,7 @@
 import { globalParams } from '@/utils/enum/globalParams'
 // @ts-ignore
 //import createUnityInstance from 'https://nikke-db-legacy.pages.dev/chibi/Build/chibi.loader.js'
-// import createUnityInstance from 'http://localhost:5173/src/assets/chibi/Build/chibi.loader.js'
+// import createUnityInstance from 'http://localhost:5173/assets/chibi/Build/chibi.loader.js'
 import { onMounted, watch, ref, type Ref, onBeforeMount } from 'vue'
 
 import { useMarket } from '@/stores/market'

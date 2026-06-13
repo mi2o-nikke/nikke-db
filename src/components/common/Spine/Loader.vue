@@ -64,6 +64,8 @@ const setupClickListener = () => {
 }
 
 const handleActionStart = () => {
+  console.log('Action triggered for pose:', market.live2d.current_pose)
+
   if (!spinePlayer) return
   
   // For cover pose - just play cover_reload then back to cover_idle
@@ -302,8 +304,8 @@ const playReloadSound = () => {
   // e.g., 'c271_01' -> 'c271'
   const baseCharacterId = market.live2d.current_id.split('_')[0]
   
-  // Construct reload sound path: /src/assets/voice/{characterId}/{characterId}_re.mp3
-  const reloadSoundPath = `/src/assets/voice/${baseCharacterId}/${baseCharacterId}_re.mp3`
+  // Construct reload sound path: /assets/voice/{characterId}/{characterId}_re.mp3
+  const reloadSoundPath = `/assets/voice/${baseCharacterId}/${baseCharacterId}_re.mp3`
   
   // Try to play reload sound
   currentReloadSound = new Audio(reloadSoundPath)
@@ -319,8 +321,8 @@ const playActionSound = () => {
     return
   }
   
-  // Construct action sound path: /src/assets/voice/{characterId}/{characterId}_ca.mp3
-  const actionSoundPath = `/src/assets/voice/${market.live2d.current_id}/${market.live2d.current_id}_ca.mp3`
+  // Construct action sound path: /assets/voice/{characterId}/{characterId}_ca.mp3
+  const actionSoundPath = `/assets/voice/${market.live2d.current_id}/${market.live2d.current_id}_ca.mp3`
   
   // Try to play action sound
   currentActionSound = new Audio(actionSoundPath)
@@ -674,6 +676,8 @@ let isAimHolding = false
 const voiceIndexMap = new Map<string, number>()
 
 const handleAction = () => {
+
+  console.log('Action triggered for pose action:', market.live2d.current_pose)
   if (!spinePlayer) return
   
   // Get available animations
@@ -793,7 +797,7 @@ watch(
     
     // Play BGM for oldtales
     if (market.live2d.current_id === 'oldtales') {
-      currentBGM = new Audio('/src/assets/voice/oldtales/oldtales_bgm.mp3')
+      currentBGM = new Audio('/assets/voice/oldtales/oldtales_bgm.mp3')
       currentBGM.loop = true
       currentBGM.volume = 0.5
       currentBGM.play().catch(err => console.log('BGM play failed:', err))

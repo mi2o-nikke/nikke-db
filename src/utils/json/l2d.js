@@ -879,50 +879,36 @@ const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
   return transformScale
 }
 
-const voiceModules = import.meta.glob('@/assets/voice/**/*.mp3', { eager: true })
-
+// Since voices are now in public/assets, we need to build the voice map differently
+// We'll generate URLs dynamically for each character based on the known structure
 const voiceMap = {}
-Object.entries(voiceModules).forEach(([path, module]) => {
-  const match = path.match(/\/([a-z0-9_]+)\/([a-z0-9_]+)\.mp3$/)
-  if (match) {
-    const folderName = match[1]
-    const filename = match[2]
 
-    const numberMatch = filename.match(/_(\d+)$/)
-    if (!numberMatch) return
-
-    const voiceNumber = parseInt(numberMatch[1])
-
-    let pose = 'normal'
-    if (voiceNumber >= 7) {
-      pose = 'cover'
-    }
-
-    let characterId = folderName
-    if (filename.includes('_ca')) {
-      characterId = filename.replace(/(_\d+)$/, '')
-    }
-
-    if (!voiceMap[characterId]) {
-      voiceMap[characterId] = {}
-    }
-    if (!voiceMap[characterId][pose]) {
-      voiceMap[characterId][pose] = []
-    }
-
-    voiceMap[characterId][pose].push(module.default)
-  }
-})
-
-Object.keys(voiceMap).forEach((characterId) => {
-  Object.keys(voiceMap[characterId]).forEach((pose) => {
-    voiceMap[characterId][pose].sort()
-  })
-})
-
+// Build voiceMap from l2dData with dynamic URL construction
 l2dData.forEach((character) => {
-  if (voiceMap[character.id]) {
-    character.voices = voiceMap[character.id]
+  const characterId = character.id
+  
+  // Check if this character is in a voice group override
+  let voiceFolderId = characterId
+  for (const [baseId, variants] of Object.entries(voiceGroupOverrides)) {
+    if (Array.isArray(variants) && variants.includes(characterId)) {
+      voiceFolderId = baseId
+      break
+    }
+  }
+  
+  voiceMap[characterId] = {
+    normal: [],
+    cover: []
+  }
+  
+  // Normal voice lines (1-6)
+  for (let i = 1; i <= 6; i++) {
+    voiceMap[characterId].normal.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
+  }
+  
+  // Cover/aim pose voice lines (7-9)
+  for (let i = 7; i <= 9; i++) {
+    voiceMap[characterId].cover.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
   }
 })
 
