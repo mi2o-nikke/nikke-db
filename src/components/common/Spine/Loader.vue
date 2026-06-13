@@ -64,7 +64,6 @@ const setupClickListener = () => {
 }
 
 const handleActionStart = () => {
-  console.log('Action triggered for pose:', market.live2d.current_pose)
 
   if (!spinePlayer) return
   
@@ -710,7 +709,6 @@ const voiceExistsCache = new Map<string, boolean>()
 
 const handleAction = () => {
 
-  console.log('Action triggered for pose action:', market.live2d.current_pose)
   if (!spinePlayer) return
   
   // Get available animations

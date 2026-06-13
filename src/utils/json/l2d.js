@@ -884,20 +884,20 @@ const setCustomZoom = (characterId, canvas, transformScale, currentPose) => {
 const voiceMap = {}
 
 // Helper function to generate voice URLs dynamically
-// URLs are generated for all possible lines (1-20) and the browser/cache will handle which ones exist
+// URLs are generated for all possible lines and the browser/cache will handle which ones exist
 const generateVoiceUrls = (voiceFolderId) => {
   const normal = []
   const cover = []
   
-  // Normal voices: Generate URLs for lines 1-20
+  // Normal voices: Generate URLs for lines 1-6 (standard normal voices)
   // The actual files may be less, the error handler will skip missing ones
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 6; i++) {
     normal.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
   }
   
-  // Cover/aim pose voices: Generate URLs for lines 1-20
+  // Cover/aim pose voices: Start from 7 onwards (covers lines 7-20)
   // The actual files may be less, the error handler will skip missing ones
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 7; i <= 9; i++) {
     cover.push(`/assets/voice/${voiceFolderId}/${voiceFolderId}_${i}.mp3`)
   }
   
