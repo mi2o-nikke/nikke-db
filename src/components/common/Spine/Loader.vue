@@ -535,6 +535,17 @@ const spineLoader = () => {
             }
           }
           
+          // c570 uses 'part_0' skin for cover and aim poses
+          if (market.live2d.current_id === 'c570' && (market.live2d.current_pose === 'cover' || market.live2d.current_pose === 'aim')) {
+            const availableSkins = player.animationState.data.skeletonData.skins
+            if (availableSkins && availableSkins.length > 0) {
+              const skinNames = availableSkins.map((s: any) => s.name)
+              if (skinNames.includes('part_0')) {
+                player.skeleton.setSkinByName('part_0')
+              }
+            }
+          }
+          
           market.live2d.triggerFinishedLoading()
           successfullyLoaded()
         },

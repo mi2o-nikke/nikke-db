@@ -137,6 +137,7 @@ import _4koma_zh from '@/utils/json/Gallery/4koma_zh.json'
 import absolute from '@/utils/json/Gallery/absolute.json'
 import albums from '@/utils/json/Gallery/albums.json'
 import arkguardian from '@/utils/json/Gallery/arkguardian.json'
+import arkranger from '@/utils/json/Gallery/arkranger.json'
 import azxservicetime from '@/utils/json/Gallery/azxservicetime.json'
 import bbqmaster from '@/utils/json/Gallery/bbqmaster.json'
 import beautyfullshot from '@/utils/json/Gallery/beautyfullshot.json'
@@ -370,11 +371,12 @@ const buttonListSideStory = [
   { data: side04 },
   { data: side05 }
 ] as buttonInterface[]
-//
+
 const buttonListEvents = [
   { data: _2x2love },
   { data: absolute },
   { data: arkguardian },
+  { data: arkranger },
   { data: beautyfullshot },
   { data: blankticket },
   { data: bluewaterisland },
@@ -547,7 +549,7 @@ const updateIndex = (newIndex: number) => {
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
   align-content: start;
 }

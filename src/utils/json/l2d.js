@@ -46,6 +46,11 @@ const l2dData = [
   { 'group': 'Aegis', 'name': 'Mast: Romantic Maid Tea Service', 'id': 'c354_01' },
   { 'group': 'Aegis', 'name': 'Anchor: Innocent Maid', 'id': 'c355' },
   { 'group': 'Aegis', 'name': 'Helm@Favorite', 'id': 'favorite_c352' },
+  
+  { 'group': 'Ark Rangers', 'name': 'Ark Ranger Black', 'id': 'c570' },
+  { 'group': 'Ark Rangers', 'name': 'Ark Ranger Black: Hood', 'id': 'c570_99' },
+  { 'group': 'Ark Rangers', 'name': 'Ark Ranger Red', 'id': 'c571' },
+  { 'group': 'Ark Rangers', 'name': 'Ark Ranger Blue', 'id': 'c572' },
 
   { 'group': 'Best Seller', 'name': 'Phantom', 'id': 'c580' },
   { 'group': 'Best Seller', 'name': 'Arcana', 'id': 'c581' },
@@ -97,6 +102,7 @@ const l2dData = [
   { 'group': 'Dazzling Pear', 'name': 'Naga', 'id': 'c450' },
   { 'group': 'Dazzling Pear', 'name': 'Naga Elegant Date', 'id': 'c450_01' },
   { 'group': 'Dazzling Pear', 'name': 'Naga Last Girlhood', 'id': 'c450_02' },
+  { 'group': 'Dazzling Pear', 'name': 'Naga Ring Ensemble', 'id': 'c450_03' },
   { 'group': 'Dazzling Pear', 'name': 'Tia', 'id': 'c451' },
   { 'group': 'Dazzling Pear', 'name': 'Tia Lovely Date', 'id': 'c451_01' },
   { 'group': 'Dazzling Pear', 'name': 'Tia Sweet Chef', 'id': 'c451_02' },
@@ -114,6 +120,7 @@ const l2dData = [
   { 'group': 'Exotic', 'name': 'Viper Shine of Love', 'id': 'c112_02' },
   { 'group': 'Exotic', 'name': 'Viper Punky Street', 'id': 'c112_03' },
   { 'group': 'Exotic', 'name': 'E.H.', 'id': 'c113' },
+  { 'group': 'Exotic', 'name': 'E.H. Junkyard Vanguard', 'id': 'c113_01' },
   { 'group': 'Exotic', 'name': 'E.H.: Origin', 'id': 'c940' },
   { 'group': 'Exotic', 'name': 'Viper@Favorite', 'id': 'favorite_c112' },
 
@@ -358,6 +365,7 @@ const l2dData = [
   { 'group': 'Underworld Queen', 'name': 'Rosanna Ms. Dangerous', 'id': 'c280_01' },
   { 'group': 'Underworld Queen', 'name': 'Moran', 'id': 'c281' },
   { 'group': 'Underworld Queen', 'name': 'Moran Off-Duty Queen', 'id': 'c281_01' },
+  { 'group': 'Underworld Queen', 'name': 'Moran King of Flowers', 'id': 'c281_02' },
   { 'group': 'Underworld Queen', 'name': 'Sakura', 'id': 'c282' },
   { 'group': 'Underworld Queen', 'name': 'Sakura Midnight Stealth', 'id': 'c282_01' },
   { 'group': 'Underworld Queen', 'name': 'Rosanna: Chic Oceon', 'id': 'c283' },
@@ -441,7 +449,6 @@ const l2dData = [
   { 'group': '_Melee', 'name': 'zMelee 2', 'id': 'c974_01' },
 
   { 'group': '_Npc', 'name': 'Logey', 'id': 'c482' },
-  { 'group': '_Npc', 'name': 'Black Ark Ranger', 'id': 'c570' },
   { 'group': '_Npc', 'name': 'Angelina', 'id': 'c934' },
   { 'group': '_Npc', 'name': 'Joseph', 'id': 'c935' },
   { 'group': '_Npc', 'name': 'Pinne', 'id': 'c941' },
@@ -459,6 +466,7 @@ const l2dData = [
   { 'group': '_Npc', 'name': 'Freesia', 'id': 'c9020_01' },
   { 'group': '_Npc', 'name': 'Yoyo', 'id': 'c9024' },
   { 'group': '_Npc', 'name': 'Amy', 'id': 'c9026' },
+  { 'group': '_Npc', 'name': 'Hope', 'id': 'c9028' },
 
   { 'group': '_Other', 'name': 'Mass Produced: Red', 'id': 'c250' },
   { 'group': '_Other', 'name': 'Mass Produced: Blue', 'id': 'c251' },
@@ -711,6 +719,7 @@ const l2dData = [
   { 'group': '__Event', 'name': 'Star Anis', 'id': 'staranis' },
   { 'group': '__Event', 'name': 'B-side Idol', 'id': 'bsideidol' },
   { 'group': '__Event', 'name': 'Bitter Spice', 'id': 'bitterspice' },
+  { 'group': '__Event', 'name': 'Ark Ranger', 'id': 'arkranger' },
 
   { 'group': '__Story', 'name': 'Story 00-01', 'id': 'story0001' },
   { 'group': '__Story', 'name': 'Story 00-01 no filter', 'id': 'story0001_2' },

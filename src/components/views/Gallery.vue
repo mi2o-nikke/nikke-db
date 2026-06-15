@@ -209,6 +209,7 @@ import madeinrush from '@/utils/json/Gallery/madeinrush.json'
 import coinsinrush from '@/utils/json/Gallery/coinsinrush.json'
 import rebornevil from '@/utils/json/Gallery/rebornevil.json'
 import goninjathief from '@/utils/json/Gallery/goninjathief.json'
+import arkranger from '@/utils/json/Gallery/arkranger.json'
 
 const market = useMarket()
 
@@ -281,7 +282,8 @@ const buttonListEvents = [
   { data: absolute },
   { data: coinsinrush },
   { data: rebornevil },
-  { data: goninjathief }
+  { data: goninjathief },
+  { data: arkranger }
 ] as buttonInterface[]
 
 const buttonListOther = [
