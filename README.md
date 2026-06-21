@@ -15,7 +15,7 @@ OR just run the bat file in folder "_run.bat", first time it might close automat
 
 _______________________________________________________
 im missing these nikke might have no sound effects
-1. E.H. Junkyard Vanguard
-2. Poli@Favorite
-3. Miranda@Favorite
-4. Milk@Favorite
+1. Poli@Favorite
+2. Miranda@Favorite
+3. Milk@Favorite
+4. Diesel@Favorite
